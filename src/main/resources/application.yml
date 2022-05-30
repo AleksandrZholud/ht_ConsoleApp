@@ -1,25 +1,31 @@
 spring:
-  pim:
-    datasource:
-      jdbcUrl: jdbc:postgresql://localhost:5432/temporaryDB_BotCrewtask
-      driver-class-name: org.postgresql.Driver
-      username: postgres
-      password: 123
-      poolName: "University-pool"
+  jpa:
+    show-sql: true
+    open-in-view: false
+    generate-ddl: on
+    properties:
+      org.hibernate.envers.store_data_at_delete: true
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 123
+    poolName: "University-pool"
+    url: jdbc:postgresql://localhost:5432/temporaryDB_BotCrewtask
   config:
     activate:
       on-profile: dev
 
-server:
-  tomcat:
-    additional-tld-skip-patterns: "*.jar"
-    context:
-      JarScanner:
-        scanClassPath: false
-        JarScanFilter:
-          defaultPluggabilityScan: "false"
-    util:
-      scan:
-        StandardJarScanFilter:
-          jarsToSkip: "*"
-
+#server:
+#  tomcat:
+#    additional-tld-skip-patterns: "*.jar"
+#    context:
+#      JarScanner:
+#        scanClassPath: false
+#        JarScanFilter:
+#          defaultPluggabilityScan: "false"
+#    util:
+#      scan:
+#        StandardJarScanFilter:
+#          jarsToSkip: "*"
