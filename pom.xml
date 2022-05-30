@@ -52,7 +52,30 @@
     </dependencies>
 
     <build>
+        <!--suppress UnresolvedMavenProperty -->
+        <finalName>ROOT##_(V.${build.time})_${lane}</finalName>
         <plugins>
+            <!--Plugin for including dateTime in ↑ fileName -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.10</version>
+                <executions>
+                    <execution>
+                        <id>timestamp-property</id>
+                        <goals>
+                            <goal>timestamp-property</goal>
+                        </goals>
+                        <configuration>
+                            <name>build.time</name>
+                            <pattern>dd.MM-HH.mm</pattern>
+                            <locale>uk_UA</locale>
+                            <timeZone>GMT+3</timeZone>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -68,4 +91,16 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <lane>DEV</lane>
+                <activeProfile>dev</activeProfile>
+            </properties>
+        </profile>
+    </profiles>
 </project>

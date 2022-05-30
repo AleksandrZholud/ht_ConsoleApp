@@ -1,0 +1,25 @@
+spring:
+  pim:
+    datasource:
+      jdbcUrl: jdbc:postgresql://localhost:5432/temporaryDB_BotCrewtask
+      driver-class-name: org.postgresql.Driver
+      username: postgres
+      password: 123
+      poolName: "University-pool"
+  config:
+    activate:
+      on-profile: dev
+
+server:
+  tomcat:
+    additional-tld-skip-patterns: "*.jar"
+    context:
+      JarScanner:
+        scanClassPath: false
+        JarScanFilter:
+          defaultPluggabilityScan: "false"
+    util:
+      scan:
+        StandardJarScanFilter:
+          jarsToSkip: "*"
+
