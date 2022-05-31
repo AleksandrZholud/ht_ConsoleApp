@@ -1,5 +1,6 @@
 package hometask.ht_botscrew;
 
+import hometask.ht_botscrew.domain.Lector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -14,7 +15,7 @@ public class HtBotsCrewApplication implements CommandLineRunner {
         SpringApplication.run(HtBotsCrewApplication.class, args);
         LOG.info("APPLICATION FINISHED");
     }
-    private static Logger LOG = LoggerFactory
+    private static final Logger LOG = LoggerFactory
             .getLogger(HtBotsCrewApplication.class);
 
     @Override
@@ -23,7 +24,6 @@ public class HtBotsCrewApplication implements CommandLineRunner {
         for (int i = 0; i < args.length; ++i) {
             LOG.info("args[{}]: {}", i, args[i]);
         }
-        System.out.println("\n\nHello, World!)\n\n");
+        System.out.println("\n\nHello, World!)\n\n");*/
     }
-
 }
