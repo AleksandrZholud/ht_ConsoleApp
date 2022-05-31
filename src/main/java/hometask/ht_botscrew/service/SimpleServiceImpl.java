@@ -1,5 +1,6 @@
 package hometask.ht_botscrew.service;
 
+import hometask.ht_botscrew.domain.Department;
 import hometask.ht_botscrew.domain.Lector;
 import hometask.ht_botscrew.repository.DepartmentRepository;
 import hometask.ht_botscrew.repository.LectorsRepository;
@@ -21,7 +22,8 @@ public class SimpleServiceImpl implements StandartService {
 
     @Override
     public Lector getHeadOfDepartment(String departmentName) {
-        return null;
+        Department department = departmentRepository.findByName(departmentName).orElse(null);
+        return department.getHeadLector();
     }
 
     @Override
