@@ -14,9 +14,16 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "departments_name")
+    @Column(name = "name")
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(
+            name = "lectors_departments",
+            joinColumns = @JoinColumn(name = "department_id"),
+            inverseJoinColumns = @JoinColumn(name = "lectors_id"))
     private Set<Lector> lectors = new HashSet<>();
+
+    @OneToOne(cascade = {CascadeType.ALL})
+    private Lector headLector;
 }
