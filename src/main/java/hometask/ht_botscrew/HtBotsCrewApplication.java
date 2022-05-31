@@ -21,6 +21,9 @@ public class HtBotsCrewApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {LOG.info("EXECUTING : command line runner");
 
+        Lector lector1 = new Lector();
+
+        /*
         for (int i = 0; i < args.length; ++i) {
             LOG.info("args[{}]: {}", i, args[i]);
         }
