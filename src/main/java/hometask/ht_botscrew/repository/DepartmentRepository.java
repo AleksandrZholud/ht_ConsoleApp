@@ -15,7 +15,4 @@ public interface DepartmentRepository  extends JpaRepository<Department, Long> {
     @Query(value = "select count (*) from lector_department where department_id = " +
             "(select id from department where name = :departmentName)", nativeQuery = true)
     int getCountOfLectorsByDepartmentName(String departmentName);
-
-   /* @Query("select all from lectors where id = ", nativeQuery = true)
-    void findAllLectorsByDepartmentId(Long id);*/
 }

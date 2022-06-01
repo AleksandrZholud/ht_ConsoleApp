@@ -2,9 +2,8 @@ package hometask.ht_botscrew;
 
 import hometask.ht_botscrew.domain.Department;
 import hometask.ht_botscrew.domain.Lector;
-import hometask.ht_botscrew.service.department.DepartmentService;
+import hometask.ht_botscrew.service.department.DepartmentFacade;
 import hometask.ht_botscrew.service.lector.LectorFacade;
-import hometask.ht_botscrew.service.lector.LectorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,11 +15,11 @@ import java.util.Scanner;
 @SpringBootApplication
 public class HtBotsCrewApplication implements CommandLineRunner {
 
-    private final DepartmentService departmentService;
+    private final DepartmentFacade departmentFacade;
     private final LectorFacade lectorFacade;
 
-    public HtBotsCrewApplication(DepartmentService departmentService, LectorFacade lectorFacade) {
-        this.departmentService = departmentService;
+    public HtBotsCrewApplication(DepartmentFacade departmentFacade, LectorFacade lectorFacade) {
+        this.departmentFacade = departmentFacade;
         this.lectorFacade = lectorFacade;
     }
 
@@ -46,7 +45,7 @@ public class HtBotsCrewApplication implements CommandLineRunner {
 
             LOG.info("Input Name of DEP for ADDING HEAD");
             String nameDepForADDHeadLector = in.next();
-            Department department = departmentService.findByName(nameDepForADDHeadLector);
+            Department department = departmentFacade.findByName(nameDepForADDHeadLector);
 
             LOG.info("Input FIO of Lector for ADDING HEAD");
             String lectorsFIO = in.next();
@@ -58,13 +57,13 @@ public class HtBotsCrewApplication implements CommandLineRunner {
             LOG.info(String.format("   ======   lector %s in DEPARTMENT ADDED → → → ← ← ← OK   ======   \n", lectorForSave.getName()));
             lectorForSave = lectorFacade.findByFIO(lectorsFIO).orElse(null);
 
-            department = departmentService.setHeadOfDepartment(lectorForSave, nameDepForADDHeadLector);
+            department = departmentFacade.setHeadOfDepartment(lectorForSave, nameDepForADDHeadLector);
             if(department == null){
                 LOG.error(String.format("   ======   lector is not contains in Department %s  ======   \n", nameDepForADDHeadLector));
                 break;}
             else LOG.info(String.format("   ======   dep %s from ← ← ← DB GOT   ======   \n", department.getName()));
 
-            int count = departmentService.getCountOfLectors(nameDepForADDHeadLector);
+            int count = departmentFacade.getCountOfLectors(nameDepForADDHeadLector);
             LOG.info(String.format("\n\n========→========→========→========→========→========→%s\n", count));
 
             LOG.info("   ======   dep from ← ← ← DB GOT   ======   \n");
@@ -76,7 +75,7 @@ public class HtBotsCrewApplication implements CommandLineRunner {
 
     private void fillDB(Scanner in) {
         LOG.info("   ======   Input string Names For DEPARTMENTS   ======  ");
-        departmentService.fillDbDepartments(in.next());
+        departmentFacade.fillDbDepartments(in.next());
         LOG.info("   ======   Input string Names For LECTORS   ======   ");
         lectorFacade.fillDbLectors(in.next());
     }
