@@ -13,6 +13,6 @@ public interface DepartmentRepository  extends JpaRepository<Department, Long> {
     Optional<Department> findByName(String departmentName);
 
     @Query(value = "select count (*) from lector_department where department_id = " +
-            "(select id from department where name = :departmentName)", nativeQuery = true)
+            "(select id from departments where name = :departmentName)", nativeQuery = true)
     int getCountOfLectorsByDepartmentName(String departmentName);
 }

@@ -3,36 +3,28 @@ package hometask.ht_botscrew.service.lector;
 import hometask.ht_botscrew.domain.DEGREE;
 import hometask.ht_botscrew.domain.Department;
 import hometask.ht_botscrew.domain.Lector;
-import hometask.ht_botscrew.service.department.DepartmentFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class LectorFacade {
 
     private final LectorService lectorService;
-    private final DepartmentFacade departmentFacade;
 
-    public LectorFacade(DepartmentFacade departmentFacade, LectorService lectorService) {
-        this.departmentFacade = departmentFacade;
+    public LectorFacade(LectorService lectorService) {
         this.lectorService = lectorService;
     }
 
     private static final Logger LOG = LoggerFactory
             .getLogger(LectorService.class);
 
-    public Optional<Lector> findByFIO(String lectorsFIO) {
-        return lectorService.findByFio(lectorsFIO);
-    }
 
-    public Lector addDepartmentForLector(Lector lector, Department department) {
-        return lectorService.findByFio(lector.getFio())
-                .map(v -> lectorService.addDepartmentForLector(lector, department)).orElse(null);
+    public Optional<Lector> findByFio(String lectorsFIO) {
+        return lectorService.findByFio(lectorsFIO);
     }
 
     public void fillDbLectors(String fiosSeparatedByComa) {
@@ -49,6 +41,10 @@ public class LectorFacade {
 
     public List<Lector> findAllLectorsByDepartmentId(Long departmentId) {
         return lectorService.findAllByDepartmentId(departmentId);
+    }
+
+    public Lector findById(Long lectorId) {
+        return lectorService.findById(lectorId).orElse(null);
     }
 
 /*  public List<Lector> findAllLectorsByDepartmentId(Long departmentId) {

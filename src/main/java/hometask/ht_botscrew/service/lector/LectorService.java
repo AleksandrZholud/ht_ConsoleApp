@@ -19,9 +19,8 @@ public class LectorService extends AbstractBotsCrewService<Lector, Long, Lectors
         return repository.findByFio(fio);
     }
 
-    public Lector addDepartmentForLector(Lector lector, Department department) {
-        lector.addDepartment(department);
-        return repository.save(lector);
+    public Optional<Lector> findById(Long id){
+        return repository.findById(id);
     }
 
     public List<Lector> findAllByDepartmentId(Long departmentId) {

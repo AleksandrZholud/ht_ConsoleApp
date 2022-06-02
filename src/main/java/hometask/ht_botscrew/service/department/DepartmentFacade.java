@@ -13,31 +13,35 @@ public class DepartmentFacade {
     private final DepartmentService departmentService;
     private final LectorFacade lectorFacade;
 
-    public DepartmentFacade(LectorFacade lectorFacade, DepartmentService departmentService) {
-        this.lectorFacade = lectorFacade;
+    public DepartmentFacade(DepartmentService departmentService, LectorFacade lectorFacade) {
         this.departmentService = departmentService;
+        this.lectorFacade = lectorFacade;
     }
+
 
     public Department findByName(String departmentName) {
         return departmentService.findByName(departmentName).orElse(null);
     }
 
     public Department setHeadOfDepartment(Lector lector, String departmentName) {
+        lector = addDepartmentToLector(lector.getId(),
+                Objects.requireNonNull(departmentService.findByName(departmentName).orElse(null)));
         Department department = departmentService.findByName(departmentName).orElse(null);
-        addDepartmentToLector_ifLectorNotContainsInCurrentDepartment(lector, department);
-        department.setHeadLector(lector);
-        System.out.printf("\ndepartment{%s}.setHeadLector = OK\n\n", departmentName);
-        return departmentService.save(department);
+        if (department != null) {
+            department.setHeadLector(lector);
+            System.out.printf("\ndepartment{%s}.setHeadLector = OK\n\n", departmentName);
+            return departmentService.save(department);
+        } else return null;
     }
 
-    private void addDepartmentToLector_ifLectorNotContainsInCurrentDepartment(Lector lector, Department department) {
-        List<Lector> lectors = lectorFacade.findAllLectorsByDepartmentId(department.getId());
-        lectors.stream().filter(v -> !v.getName().equals(lector.getName()))
-                .forEach(unsavedLectorInDepartment -> lectorFacade.addDepartmentForLector(unsavedLectorInDepartment, department));
+    private Lector addDepartmentToLector(Long lectorId, Department department) {
+        department.addLector(lectorId);
+        departmentService.save(department);
+        return lectorFacade.findById(lectorId);
     }
 
     public int getCountOfLectors(String nameDepartment) {
-        return 0;
+        return departmentService.getCountOfLectors(nameDepartment);
     }
 
     public void fillDbDepartments(String namesSeparatedByComa) {

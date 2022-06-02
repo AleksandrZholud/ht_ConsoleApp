@@ -24,9 +24,8 @@ public class HtBotsCrewApplication implements CommandLineRunner {
     }
 
     public static void main(String[] args) {
-        LOG.info("STARTING THE APPLICATION");
         SpringApplication.run(HtBotsCrewApplication.class, args);
-        LOG.info("APPLICATION FINISHED");
+        LOG.warn("APPLICATION FINISHED");
     }
 
     private static final Logger LOG = LoggerFactory
@@ -36,28 +35,23 @@ public class HtBotsCrewApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        LOG.info("EXECUTING : command line runner");
+        LOG.warn("EXECUTING : command line runner");
 
         fillDB(in);
 
-        System.out.print("\t\tAre u ready? ");
+        System.out.print("\t\t\t\t\t\t\t\t\tAre u ready? ");
         while (in.nextInt() != 0) {
 
             LOG.info("Input Name of DEP for ADDING HEAD");
             String nameDepForADDHeadLector = in.next();
-            Department department = departmentFacade.findByName(nameDepForADDHeadLector);
 
             LOG.info("Input FIO of Lector for ADDING HEAD");
             String lectorsFIO = in.next();
-            Lector lectorForSave = lectorFacade.findByFIO(lectorsFIO).orElse(null);
+            Lector lectorForSave = lectorFacade.findByFio(lectorsFIO).orElse(null);
 
             //////////////////////////////////////////////////////////////////////////////
 
-            if(lectorForSave!=null) lectorForSave = lectorFacade.addDepartmentForLector(lectorForSave, department);
-            LOG.info(String.format("   ======   lector %s in DEPARTMENT ADDED → → → ← ← ← OK   ======   \n", lectorForSave.getName()));
-            lectorForSave = lectorFacade.findByFIO(lectorsFIO).orElse(null);
-
-            department = departmentFacade.setHeadOfDepartment(lectorForSave, nameDepForADDHeadLector);
+            Department department = departmentFacade.setHeadOfDepartment(lectorForSave, nameDepForADDHeadLector);
             if(department == null){
                 LOG.error(String.format("   ======   lector is not contains in Department %s  ======   \n", nameDepForADDHeadLector));
                 break;}
