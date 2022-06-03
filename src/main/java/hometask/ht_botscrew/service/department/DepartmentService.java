@@ -1,5 +1,6 @@
 package hometask.ht_botscrew.service.department;
 
+import hometask.ht_botscrew.domain.DEGREE;
 import hometask.ht_botscrew.domain.Department;
 import hometask.ht_botscrew.repository.DepartmentRepository;
 import hometask.ht_botscrew.service.AbstractBotsCrewService;
@@ -27,5 +28,17 @@ public class DepartmentService extends AbstractBotsCrewService<Department, Long,
 
     public Optional<Department> findByName(String departmentName) {
         return departmentRepository.findByName(departmentName);
+    }
+
+    public int getCountOfLectorsByDepartmentIdAndDegree(Long id, DEGREE degree){
+        return repository.getCountOfLectorsByDepartmentIdAndDegree(id, degree.toString());
+    }
+
+    public long getAvarageSalaryByDepartmentId(Long id) {
+        return repository.getAvarageSalaryByDepartmentId(id);
+    }
+
+    public List<String> getAllNames() {
+        return repository.getAllNames();
     }
 }
