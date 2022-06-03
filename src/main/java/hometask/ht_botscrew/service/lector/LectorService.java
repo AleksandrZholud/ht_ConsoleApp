@@ -26,4 +26,8 @@ public class LectorService extends AbstractBotsCrewService<Lector, Long, Lectors
     public List<Lector> findAllByDepartmentId(Long departmentId) {
         return repository.findAllByDepartmentId(departmentId);
     }
+
+    public List<String> getAllFios() {
+        return repository.getAllFios();
+    }
 }
