@@ -2,13 +2,13 @@ package consoleApp.service.lector;
 
 import consoleApp.domain.Lector;
 import consoleApp.repository.LectorsRepository;
-import consoleApp.service.AbstractBotsCrewService;
+import consoleApp.service.AbstractMainService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
-public class LectorService extends AbstractBotsCrewService<Lector, Long, LectorsRepository> {
+public class LectorService extends AbstractMainService<Lector, Long, LectorsRepository> {
 
     public Optional<Lector> findByFio(String fio){
         return repository.findByFio(fio);

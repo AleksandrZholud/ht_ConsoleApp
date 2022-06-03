@@ -3,14 +3,14 @@ package consoleApp.service.department;
 import consoleApp.domain.DEGREE;
 import consoleApp.domain.Department;
 import consoleApp.repository.DepartmentRepository;
-import consoleApp.service.AbstractBotsCrewService;
+import consoleApp.service.AbstractMainService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 @Service
-public class DepartmentService extends AbstractBotsCrewService<Department, Long, DepartmentRepository> {
+public class DepartmentService extends AbstractMainService<Department, Long, DepartmentRepository> {
 
     private final DepartmentRepository departmentRepository;
 

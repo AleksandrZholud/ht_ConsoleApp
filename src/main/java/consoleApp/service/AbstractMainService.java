@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractBotsCrewService<E, Z, T extends JpaRepository<E, Z>> {
+public abstract class AbstractMainService<E, Z, T extends JpaRepository<E, Z>> {
 
     @Autowired
     protected T repository;
