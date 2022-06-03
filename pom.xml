@@ -10,10 +10,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>homeTask</groupId>
-    <artifactId>ht_BotsCrew</artifactId>
+    <artifactId>Ht_SpringConsoleApp</artifactId>
     <version>No_version</version>
-    <name>ht_BotsCrew</name>
-    <description>ht_BotsCrew</description>
+    <name>Ht_SpringConsoleApp</name>
+    <description>Ht_SpringConsoleApp</description>
     <properties>
         <java.version>11</java.version>
     </properties>

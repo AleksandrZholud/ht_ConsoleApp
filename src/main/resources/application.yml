@@ -12,7 +12,7 @@ spring:
     username: postgres
     password: 123
     poolName: "University-pool"
-    url: jdbc:postgresql://localhost:5432/temporaryDB_BotCrewtask
+    url: jdbc:postgresql://localhost:5432/tmp_ConsoleAppOnSpringForLectorDepartment
   config:
     activate:
       on-profile: dev

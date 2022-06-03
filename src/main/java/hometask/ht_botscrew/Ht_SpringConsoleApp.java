@@ -19,23 +19,23 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @SpringBootApplication
-public class HtBotsCrewApplication implements CommandLineRunner {
+public class Ht_SpringConsoleApp implements CommandLineRunner {
 
     private final DepartmentFacade departmentFacade;
     private final LectorFacade lectorFacade;
 
-    public HtBotsCrewApplication(DepartmentFacade departmentFacade, LectorFacade lectorFacade) {
+    public Ht_SpringConsoleApp(DepartmentFacade departmentFacade, LectorFacade lectorFacade) {
         this.departmentFacade = departmentFacade;
         this.lectorFacade = lectorFacade;
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(HtBotsCrewApplication.class, args);
+        SpringApplication.run(Ht_SpringConsoleApp.class, args);
         LOG.warn("APPLICATION FINISHED");
     }
 
     private static final Logger LOG = LoggerFactory
-            .getLogger(HtBotsCrewApplication.class);
+            .getLogger(Ht_SpringConsoleApp.class);
 
     Scanner in = new Scanner(System.in).useDelimiter("\n");
 
