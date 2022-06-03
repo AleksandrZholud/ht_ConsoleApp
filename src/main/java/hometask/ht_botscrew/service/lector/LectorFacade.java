@@ -47,6 +47,10 @@ public class LectorFacade {
         return lectorService.findById(lectorId).orElse(null);
     }
 
+    public List<String> getAllFios() {
+        return lectorService.getAllFios();
+    }
+
 /*  public List<Lector> findAllLectorsByDepartmentId(Long departmentId) {
         List<Long> lectorsIds = lectorService.findAllByDepartmentId(departmentId);
         List<Lector> lectors = new ArrayList<>();
