@@ -1,5 +1,6 @@
 package hometask.ht_botscrew.service.department;
 
+import hometask.ht_botscrew.domain.DEGREE;
 import hometask.ht_botscrew.domain.Department;
 import hometask.ht_botscrew.domain.Lector;
 import hometask.ht_botscrew.service.lector.LectorFacade;
@@ -52,5 +53,17 @@ public class DepartmentFacade {
                 System.out.println(String.format("Department: %s saved.", departmentName));
             });
         }
+    }
+
+    public int getCountOfLectorsByDepartmentIdAndDegree(Long id, DEGREE degree) {
+        return departmentService.getCountOfLectorsByDepartmentIdAndDegree(id, degree);
+    }
+
+    public long getAvarageSalaryByDepartmentId(Long id) {
+        return departmentService.getAvarageSalaryByDepartmentId(id);
+    }
+
+    public List<String> getAllNames() {
+        return departmentService.getAllNames();
     }
 }
