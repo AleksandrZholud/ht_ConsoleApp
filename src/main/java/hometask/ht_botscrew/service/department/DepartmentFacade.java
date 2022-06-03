@@ -30,14 +30,15 @@ public class DepartmentFacade {
         Department department = departmentService.findByName(departmentName).orElse(null);
         if (department != null) {
             department.setHeadLector(lector);
-            System.out.printf("\ndepartment{%s}.setHeadLector = OK\n\n", departmentName);
+            System.out.printf("department{%s}.setHeadLector = OK\n", departmentName);
             return departmentService.save(department);
         } else return null;
     }
 
-    private Lector addDepartmentToLector(Long lectorId, Department department) {
+    public Lector addDepartmentToLector(Long lectorId, Department department) {
         department.addLector(lectorId);
         departmentService.save(department);
+        System.out.println("addLectorIntoDepartment OK");
         return lectorFacade.findById(lectorId);
     }
 

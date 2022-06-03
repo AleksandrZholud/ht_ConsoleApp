@@ -2,6 +2,7 @@ package hometask.ht_botscrew;
 
 import hometask.ht_botscrew.domain.DEGREE;
 import hometask.ht_botscrew.domain.Department;
+import hometask.ht_botscrew.domain.Lector;
 import hometask.ht_botscrew.service.department.DepartmentFacade;
 import hometask.ht_botscrew.service.lector.LectorFacade;
 import org.slf4j.Logger;
@@ -61,19 +62,46 @@ public class HtBotsCrewApplication implements CommandLineRunner {
                 String departmentName = command.substring("show the average salary for the department ".length());
                 showAverageSalaryByDepartmentName(departmentName);
 
-            } else if (command.contains("show count of employee for")) {
-                String departmentName = command.substring("show count of employee for ".length());
+            } else if (command.contains("show count of lectors for")) {
+                String departmentName = command.substring("show count of lectors for ".length());
                 showCountOfLectorsByDepartmentName(departmentName);
 
             } else if (command.contains("global search by")) {
                 String template = command.substring("global search by ".length());
                 globalSearch(template);
 
+            }  else if (command.contains("add lec into dep ")) {
+                String lectorAndDepartment = command.substring("add lec into dep ".length());
+                addLectorIntoDepartment(lectorAndDepartment);
+
+            }  else if (command.contains("set head ")) {
+                String lectorAndDepartment = command.substring("set head ".length());
+                setHeadOfDepartment(lectorAndDepartment);
+
             } else {
                 LOG.error("ERROR: Unknown command!");
             }
 
             System.out.print("\t\t\t\t\t\t\t\t\tInput your command, please: ");
+        }
+    }
+
+    private void addLectorIntoDepartment(String lectorAndDepartment) {
+        String lectorFio = lectorAndDepartment.split(",")[0];
+        String departmentName = lectorAndDepartment.split(",")[1];
+        Lector lector = lectorFacade.findByFio(lectorFio);
+        Department department = departmentFacade.findByName(departmentName);
+        if(lector!=null&&department!=null){
+            departmentFacade.addDepartmentToLector(lector.getId(),department);
+        }
+    }
+
+    private void setHeadOfDepartment(String lectorAndDepartment) {
+        String lectorFio = lectorAndDepartment.split(",")[0];
+        String departmentName = lectorAndDepartment.split(",")[1];
+        Lector lector = lectorFacade.findByFio(lectorFio);
+        if (lector != null) {
+            departmentFacade.setHeadOfDepartment(lector,departmentName);
         }
     }
 
@@ -90,8 +118,7 @@ public class HtBotsCrewApplication implements CommandLineRunner {
         Department department = departmentFacade.findByName(departmentName);
         if (department != null) {
             if (department.getLectors() != null) {
-                BigDecimal avgSalary = BigDecimal.valueOf(departmentFacade.getCountOfLectors(departmentName));
-                LOG.info(String.format("The average salary of %s is %s\n", departmentName, avgSalary));
+                LOG.info(String.format("%s\n", department.getLectors().size()));
             } else {
                 LOG.info(String.format("Department %s has no Lectors\n", departmentName));
             }
@@ -139,7 +166,7 @@ public class HtBotsCrewApplication implements CommandLineRunner {
         Department department = departmentFacade.findByName(departmentName);
         if (department != null) {
             if (department.getName() != null) {
-                LOG.info(String.format("Head of %s department is %s\n", departmentName, department.getHeadLector()));
+                LOG.info(String.format("Head of %s department is %s\n", departmentName, department.getHeadLector().getFio()));
             } else {
                 LOG.info(String.format("Department %s has no Head\n", departmentName));
             }

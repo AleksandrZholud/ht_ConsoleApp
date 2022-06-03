@@ -23,8 +23,8 @@ public class LectorFacade {
             .getLogger(LectorService.class);
 
 
-    public Optional<Lector> findByFio(String lectorsFIO) {
-        return lectorService.findByFio(lectorsFIO);
+    public Lector findByFio(String lectorsFIO) {
+        return lectorService.findByFio(lectorsFIO).orElse(null);
     }
 
     public void fillDbLectors(String fiosSeparatedByComa) {
@@ -34,7 +34,7 @@ public class LectorFacade {
                 String[] names = lectorsName.split(" ");
                 Lector tmp = new Lector(names[0], names[1], DEGREE.ASSISTANT, BigDecimal.valueOf(1000));
                 lectorService.save(tmp);
-                LOG.info(String.format("Lector: %s %s saved.", names[0], names[1]));
+                System.out.println(String.format("Lector: %s %s saved.", names[0], names[1]));
             });
         }
     }
