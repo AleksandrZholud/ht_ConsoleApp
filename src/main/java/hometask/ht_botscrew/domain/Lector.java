@@ -33,19 +33,11 @@ public class Lector {
 
     private BigDecimal salary;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(name = "lector_department",
-            joinColumns = @JoinColumn(name = "lector_id"),
-            inverseJoinColumns = @JoinColumn(name = "department_id"))
-    private Set<Department> departments = new HashSet<>();
-
-    public void addDepartment(Department department){
-        departments.add(department);
-    }
-
-    public void removeDepartment(Department department) {
-        departments.removeIf(cat -> cat.getId().equals(department.getId()));
-    }
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+//    @JoinTable(name = "lector_department",
+//            joinColumns = @JoinColumn(name = "lector_id"),
+//            inverseJoinColumns = @JoinColumn(name = "department_id"))
+//    private Set<Department> departments = new HashSet<>();
 
     public Lector(String name, String lastName, DEGREE degree, BigDecimal salary) {
         this.name = name;

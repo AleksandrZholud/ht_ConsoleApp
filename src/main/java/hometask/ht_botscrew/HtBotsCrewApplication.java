@@ -1,33 +1,36 @@
 package hometask.ht_botscrew;
 
+import hometask.ht_botscrew.domain.DEGREE;
 import hometask.ht_botscrew.domain.Department;
-import hometask.ht_botscrew.domain.Lector;
-import hometask.ht_botscrew.service.department.DepartmentService;
+import hometask.ht_botscrew.service.department.DepartmentFacade;
 import hometask.ht_botscrew.service.lector.LectorFacade;
-import hometask.ht_botscrew.service.lector.LectorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class HtBotsCrewApplication implements CommandLineRunner {
 
-    private final DepartmentService departmentService;
+    private final DepartmentFacade departmentFacade;
     private final LectorFacade lectorFacade;
 
-    public HtBotsCrewApplication(DepartmentService departmentService, LectorFacade lectorFacade) {
-        this.departmentService = departmentService;
+    public HtBotsCrewApplication(DepartmentFacade departmentFacade, LectorFacade lectorFacade) {
+        this.departmentFacade = departmentFacade;
         this.lectorFacade = lectorFacade;
     }
 
     public static void main(String[] args) {
-        LOG.info("STARTING THE APPLICATION");
         SpringApplication.run(HtBotsCrewApplication.class, args);
-        LOG.info("APPLICATION FINISHED");
+        LOG.warn("APPLICATION FINISHED");
     }
 
     private static final Logger LOG = LoggerFactory
@@ -37,46 +40,147 @@ public class HtBotsCrewApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        LOG.info("EXECUTING : command line runner");
+        LOG.warn("EXECUTING : command line runner");
 
         fillDB(in);
 
-        System.out.print("\t\tAre u ready? ");
-        while (in.nextInt() != 0) {
+        System.out.print("\t\t\t\t\t\t\t\t\tInput your command, please: ");
+        for (String command = in.next(); !command.equalsIgnoreCase("exit"); command = in.next()) {
+            command = command.toLowerCase();
 
-            LOG.info("Input Name of DEP for ADDING HEAD");
-            String nameDepForADDHeadLector = in.next();
-            Department department = departmentService.findByName(nameDepForADDHeadLector);
+            if (command.contains("who is head of department")) {
+                String departmentName = command.substring("who is head of department ".length());
+                showHeadOfDepartment(departmentName);
 
-            LOG.info("Input FIO of Lector for ADDING HEAD");
-            String lectorsFIO = in.next();
-            Lector lectorForSave = lectorFacade.findByFIO(lectorsFIO).orElse(null);
+            } else if (command.contains("show") && command.contains("statistics")) {
+                String departmentName = Arrays.stream(command.split(" "))
+                        .filter(s -> !s.equals("show") && !s.equals("statistics")).collect(Collectors.joining(" "));
+                showStatistics(departmentName);
 
-            //////////////////////////////////////////////////////////////////////////////
+            } else if (command.contains("show the average salary for the department")) {
+                String departmentName = command.substring("show the average salary for the department ".length());
+                showAverageSalaryByDepartmentName(departmentName);
 
-            if(lectorForSave!=null) lectorForSave = lectorFacade.addDepartmentForLector(lectorForSave, department);
-            LOG.info(String.format("   ======   lector %s in DEPARTMENT ADDED → → → ← ← ← OK   ======   \n", lectorForSave.getName()));
-            lectorForSave = lectorFacade.findByFIO(lectorsFIO).orElse(null);
+            } else if (command.contains("show count of employee for")) {
+                String departmentName = command.substring("show count of employee for ".length());
+                showCountOfLectorsByDepartmentName(departmentName);
 
-            department = departmentService.setHeadOfDepartment(lectorForSave, nameDepForADDHeadLector);
-            if(department == null){
-                LOG.error(String.format("   ======   lector is not contains in Department %s  ======   \n", nameDepForADDHeadLector));
-                break;}
-            else LOG.info(String.format("   ======   dep %s from ← ← ← DB GOT   ======   \n", department.getName()));
+            } else if (command.contains("global search by")) {
+                String template = command.substring("global search by ".length());
+                globalSearch(template);
 
-            int count = departmentService.getCountOfLectors(nameDepForADDHeadLector);
-            LOG.info(String.format("\n\n========→========→========→========→========→========→%s\n", count));
+            } else {
+                LOG.error("ERROR: Unknown command!");
+            }
 
+            //            switch(command.toLowerCase()) {
+//                case "who is head of department": {
+//
+//                }
+//                case "statistics":{
+//
+//                }
+//                case "show the average salary for the department":{
+//
+//                }
+//                case "show count of employee for": {
+//
+//                }
+//                case "global search by": {
+//
+//                }
+//                default:{
+//                    LOG.error("ERROR: Unknown command!");
+//                }
+//            }
+
+            /*
             LOG.info("   ======   dep from ← ← ← DB GOT   ======   \n");
             LOG.info("   ======   lector saved into → → → DB   ======   \n");
+            */
 
-            System.out.print("\t\tAre u ready ? ");
+            System.out.print("\t\t\t\t\t\t\t\t\tInput your command, please: ");
         }
+    }
+
+    private void globalSearch(String template) {
+        List<String> collectionOfAllLectorFiosAndDepartmentNames = lectorFacade.getAllFios();
+        collectionOfAllLectorFiosAndDepartmentNames.addAll(departmentFacade.getAllNames());
+        collectionOfAllLectorFiosAndDepartmentNames = new ArrayList<>(collectionOfAllLectorFiosAndDepartmentNames.stream()
+                .filter(anyDepNameOrFio -> anyDepNameOrFio.toLowerCase().contains(template))
+                .collect(Collectors.toSet()));
+        LOG.info(String.join(",", collectionOfAllLectorFiosAndDepartmentNames));
+    }
+
+    private void showCountOfLectorsByDepartmentName(String departmentName) {
+        Department department = departmentFacade.findByName(departmentName);
+        if (department != null) {
+            if (department.getLectors() != null) {
+                BigDecimal avgSalary = BigDecimal.valueOf(departmentFacade.getCountOfLectors(departmentName));
+                LOG.info(String.format("The average salary of %s is %s\n", departmentName, avgSalary));
+            } else {
+                LOG.info(String.format("Department %s has no Lectors\n", departmentName));
+            }
+        } else {
+            LOG.info(String.format("Department %s is not exist.\n", departmentName));
+        }
+    }
+
+    private void showAverageSalaryByDepartmentName(String departmentName) {
+        showWarnTryFindDepartment(departmentName);
+        Department department = departmentFacade.findByName(departmentName);
+        if (department != null) {
+            if (department.getLectors() != null) {
+                BigDecimal avgSalary = BigDecimal.valueOf(departmentFacade.getAvarageSalaryByDepartmentId(department.getId()));
+                LOG.info(String.format("The average salary of %s is %s\n", departmentName, avgSalary));
+            } else {
+                LOG.info(String.format("Department %s has no Lectors\n", departmentName));
+            }
+        } else {
+            LOG.info(String.format("Department %s is not exist.\n", departmentName));
+        }
+    }
+
+    private void showStatistics(String departmentName) {
+        showWarnTryFindDepartment(departmentName);
+        Department department = departmentFacade.findByName(departmentName);
+        if (department != null) {
+            if (department.getLectors() != null) {
+                int countOfAssistants = departmentFacade.getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.ASSISTANT);
+                int countOfAssociateProfessors = departmentFacade.getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.ASSOCIATE_PROFESSOR);
+                int countOfProfessors = departmentFacade.getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.PROFESSOR);
+                LOG.info(String.format("\n\t\t\tassistans - %s\n" +
+                        "\t\t\tassociate professors - %s\n" +
+                        "\t\t\tprofessors - %s\n", countOfAssistants, countOfAssociateProfessors, countOfProfessors));
+            } else {
+                LOG.info(String.format("Department %s has no Lectors", departmentName));
+            }
+        } else {
+            LOG.info(String.format("Department %s is not exist.", departmentName));
+        }
+    }
+
+    private void showHeadOfDepartment(String departmentName) {
+        showWarnTryFindDepartment(departmentName);
+        Department department = departmentFacade.findByName(departmentName);
+        if (department != null) {
+            if (department.getName() != null) {
+                LOG.info(String.format("Head of %s department is %s\n", departmentName, department.getHeadLector()));
+            } else {
+                LOG.info(String.format("Department %s has no Head\n", departmentName));
+            }
+        } else {
+            LOG.info(String.format("Department %s is not exist.\n", departmentName));
+        }
+    }
+
+    private void showWarnTryFindDepartment(String departmentName) {
+        //LOG.warn(String.format("Try to find department \"%s\".", departmentName));
     }
 
     private void fillDB(Scanner in) {
         LOG.info("   ======   Input string Names For DEPARTMENTS   ======  ");
-        departmentService.fillDbDepartments(in.next());
+        departmentFacade.fillDbDepartments(in.next());
         LOG.info("   ======   Input string Names For LECTORS   ======   ");
         lectorFacade.fillDbLectors(in.next());
     }

@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum DEGREE {
 
-    ASSISTANT("assistant"), ASSOCIATE_PROFESSOR("associate_professor"), PROFESSOR("professor");
+    ASSISTANT("assistant".toUpperCase()), ASSOCIATE_PROFESSOR("associate_professor".toUpperCase()), PROFESSOR("professor".toUpperCase());
 
     private final String DEGREE;
 
