@@ -1,4 +1,4 @@
-package hometask.ht_botscrew.service;
+package consoleApp.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

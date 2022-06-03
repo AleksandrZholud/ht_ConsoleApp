@@ -1,15 +1,10 @@
-package hometask.ht_botscrew.service.lector;
+package consoleApp.service.lector;
 
-import hometask.ht_botscrew.domain.DEGREE;
-import hometask.ht_botscrew.domain.Department;
-import hometask.ht_botscrew.domain.Lector;
-import hometask.ht_botscrew.repository.LectorsRepository;
-import hometask.ht_botscrew.service.AbstractBotsCrewService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import consoleApp.domain.Lector;
+import consoleApp.repository.LectorsRepository;
+import consoleApp.service.AbstractBotsCrewService;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 @Service

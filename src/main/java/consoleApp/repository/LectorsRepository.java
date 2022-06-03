@@ -1,7 +1,7 @@
-package hometask.ht_botscrew.repository;
+package consoleApp.repository;
 
 
-import hometask.ht_botscrew.domain.Lector;
+import consoleApp.domain.Lector;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

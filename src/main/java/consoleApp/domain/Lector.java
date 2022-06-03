@@ -1,4 +1,4 @@
-package hometask.ht_botscrew.domain;
+package consoleApp.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Entity

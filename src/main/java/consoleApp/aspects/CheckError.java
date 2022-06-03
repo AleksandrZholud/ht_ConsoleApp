@@ -1,4 +1,4 @@
-package hometask.ht_botscrew.aspects;
+package consoleApp.aspects;
 
 public interface CheckError {
 

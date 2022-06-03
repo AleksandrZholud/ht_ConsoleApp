@@ -1,9 +1,9 @@
-package hometask.ht_botscrew.service.department;
+package consoleApp.service.department;
 
-import hometask.ht_botscrew.domain.DEGREE;
-import hometask.ht_botscrew.domain.Department;
-import hometask.ht_botscrew.repository.DepartmentRepository;
-import hometask.ht_botscrew.service.AbstractBotsCrewService;
+import consoleApp.domain.DEGREE;
+import consoleApp.domain.Department;
+import consoleApp.repository.DepartmentRepository;
+import consoleApp.service.AbstractBotsCrewService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

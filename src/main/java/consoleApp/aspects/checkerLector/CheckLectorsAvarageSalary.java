@@ -1,7 +1,7 @@
-package hometask.ht_botscrew.aspects.checkerLector;
+package consoleApp.aspects.checkerLector;
 
 
-import hometask.ht_botscrew.aspects.CheckError;
+import consoleApp.aspects.CheckError;
 
 public class CheckLectorsAvarageSalary implements CheckError {
 

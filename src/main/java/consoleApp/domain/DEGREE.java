@@ -1,4 +1,4 @@
-package hometask.ht_botscrew.domain;
+package consoleApp.domain;
 
 import lombok.Getter;
 

@@ -1,8 +1,7 @@
-package hometask.ht_botscrew.service.lector;
+package consoleApp.service.lector;
 
-import hometask.ht_botscrew.domain.DEGREE;
-import hometask.ht_botscrew.domain.Department;
-import hometask.ht_botscrew.domain.Lector;
+import consoleApp.domain.DEGREE;
+import consoleApp.domain.Lector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
