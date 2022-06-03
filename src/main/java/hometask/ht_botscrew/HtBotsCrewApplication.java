@@ -73,32 +73,6 @@ public class HtBotsCrewApplication implements CommandLineRunner {
                 LOG.error("ERROR: Unknown command!");
             }
 
-            //            switch(command.toLowerCase()) {
-//                case "who is head of department": {
-//
-//                }
-//                case "statistics":{
-//
-//                }
-//                case "show the average salary for the department":{
-//
-//                }
-//                case "show count of employee for": {
-//
-//                }
-//                case "global search by": {
-//
-//                }
-//                default:{
-//                    LOG.error("ERROR: Unknown command!");
-//                }
-//            }
-
-            /*
-            LOG.info("   ======   dep from ← ← ← DB GOT   ======   \n");
-            LOG.info("   ======   lector saved into → → → DB   ======   \n");
-            */
-
             System.out.print("\t\t\t\t\t\t\t\t\tInput your command, please: ");
         }
     }
