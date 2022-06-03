@@ -49,40 +49,44 @@ public class HtBotsCrewApplication implements CommandLineRunner {
         for (String command = in.next(); !command.equalsIgnoreCase("exit"); command = in.next()) {
             command = command.toLowerCase();
 
-            if (command.contains("who is head of department")) {
-                String departmentName = command.substring("who is head of department ".length());
-                showHeadOfDepartment(departmentName);
+            try {
+                if (command.contains("who is head of department")) {
+                    String departmentName = command.substring("who is head of department ".length());
+                    showHeadOfDepartment(departmentName);
 
-            } else if (command.contains("show") && command.contains("statistics")) {
-                String departmentName = Arrays.stream(command.split(" "))
-                        .filter(s -> !s.equals("show") && !s.equals("statistics")).collect(Collectors.joining(" "));
-                showStatistics(departmentName);
+                } else if (command.contains("show") && command.contains("statistics")) {
+                    String departmentName = Arrays.stream(command.split(" "))
+                            .filter(s -> !s.equals("show") && !s.equals("statistics")).collect(Collectors.joining(" "));
+                    showStatistics(departmentName);
 
-            } else if (command.contains("show the average salary for the department")) {
-                String departmentName = command.substring("show the average salary for the department ".length());
-                showAverageSalaryByDepartmentName(departmentName);
+                } else if (command.contains("show the average salary for the department")) {
+                    String departmentName = command.substring("show the average salary for the department ".length());
+                    showAverageSalaryByDepartmentName(departmentName);
 
-            } else if (command.contains("show count of lectors for")) {
-                String departmentName = command.substring("show count of lectors for ".length());
-                showCountOfLectorsByDepartmentName(departmentName);
+                } else if (command.contains("show count of lectors for")) {
+                    String departmentName = command.substring("show count of lectors for ".length());
+                    showCountOfLectorsByDepartmentName(departmentName);
 
-            } else if (command.contains("global search by")) {
-                String template = command.substring("global search by ".length());
-                globalSearch(template);
+                } else if (command.contains("global search by")) {
+                    String template = command.substring("global search by ".length());
+                    globalSearch(template);
 
-            }  else if (command.contains("add lec into dep ")) {
-                String lectorAndDepartment = command.substring("add lec into dep ".length());
-                addLectorIntoDepartment(lectorAndDepartment);
+                } else if (command.contains("add lec into dep ")) {
+                    String lectorAndDepartment = command.substring("add lec into dep ".length());
+                    addLectorIntoDepartment(lectorAndDepartment);
 
-            }  else if (command.contains("set head ")) {
-                String lectorAndDepartment = command.substring("set head ".length());
-                setHeadOfDepartment(lectorAndDepartment);
+                } else if (command.contains("set head ")) {
+                    String lectorAndDepartment = command.substring("set head ".length());
+                    setHeadOfDepartment(lectorAndDepartment);
 
-            } else {
-                LOG.error("ERROR: Unknown command!");
+                } else {
+                    LOG.error("ERROR: Unknown command!");
+                }
             }
-
-            System.out.print("\t\t\t\t\t\t\t\t\tInput your command, please: ");
+            catch (Exception e){
+                LOG.error("Application error!");
+            }
+            System.out.print("\t\t\t\t\tInput your command, please: ");
         }
     }
 
