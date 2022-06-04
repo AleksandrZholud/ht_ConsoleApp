@@ -49,7 +49,7 @@
 
     <build>
         <!--suppress UnresolvedMavenProperty -->
-        <finalName>ROOT##_(V.${build.time})_${lane}</finalName>
+        <finalName>ROOT##V.${build.time}_${profileForName}</finalName>
         <plugins>
             <!--Plugin for including dateTime in ↑ fileName -->
             <plugin>
@@ -100,7 +100,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <lane>DEV</lane>
+                <profileForName>DEV</profileForName>
                 <activeProfile>dev</activeProfile>
             </properties>
         </profile>

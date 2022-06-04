@@ -1,5 +1,6 @@
 package consoleApp;
 
+import consoleApp.aspects.CC;
 import consoleApp.domain.DEGREE;
 import consoleApp.domain.Department;
 import consoleApp.domain.Lector;
@@ -31,7 +32,7 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(Ht_SpringConsoleApp.class, args);
-        LOG.warn("APPLICATION FINISHED");
+        LOG.warn(CC.YELLOW_BOLD + "APPLICATION FINISHED" + CC.RESET);
     }
 
     private static final Logger LOG = LoggerFactory
@@ -41,14 +42,11 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        LOG.warn("EXECUTING : command line runner");
+        LOG.warn(CC.YELLOW + "EXECUTING : command line runner" + CC.RESET);
 
-        fillDB(in);
-
-        System.out.print("\t\t\t\t\t\t\t\t\tInput your command, please: ");
+        System.out.print(CC.YELLOW_BOLD + "\t\t\t\t\tInput your command, please: " + CC.RESET);
         for (String command = in.next(); !command.equalsIgnoreCase("exit"); command = in.next()) {
             command = command.toLowerCase();
-
             try {
                 if (command.contains("who is head of department")) {
                     String departmentName = command.substring("who is head of department ".length());
@@ -79,14 +77,16 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
                     String lectorAndDepartment = command.substring("set head ".length());
                     setHeadOfDepartment(lectorAndDepartment);
 
+                } else if (command.equals("1")) {
+                    fillDB(in);
+
                 } else {
-                    LOG.error("ERROR: Unknown command!");
+                    LOG.error(CC.RED + "ERROR: Unknown command!" + CC.RESET);
                 }
+            } catch (Exception e) {
+                LOG.error(CC.WHITE_BACKGROUND_BRIGHT + CC.BLACK_BOLD + "Application error! Something happened wrong!" + CC.RESET);
             }
-            catch (Exception e){
-                LOG.error("Application error!");
-            }
-            System.out.print("\t\t\t\t\tInput your command, please: ");
+            System.out.print(CC.YELLOW_BOLD + "\t\t\t\t\tInput your command, please: " + CC.RESET);
         }
     }
 
@@ -95,8 +95,8 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
         String departmentName = lectorAndDepartment.split(",")[1];
         Lector lector = lectorFacade.findByFio(lectorFio);
         Department department = departmentFacade.findByName(departmentName);
-        if(lector!=null&&department!=null){
-            departmentFacade.addDepartmentToLector(lector.getId(),department);
+        if (lector != null && department != null) {
+            departmentFacade.addDepartmentToLector(lector.getId(), department);
         }
     }
 
@@ -105,7 +105,8 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
         String departmentName = lectorAndDepartment.split(",")[1];
         Lector lector = lectorFacade.findByFio(lectorFio);
         if (lector != null) {
-            departmentFacade.setHeadOfDepartment(lector,departmentName);
+            departmentFacade.setHeadOfDepartment(lector, departmentName);
+            System.out.printf(CC.GREEN + "department %s.setHeadLector = OK\n" + CC.RESET, departmentName);
         }
     }
 
@@ -124,30 +125,28 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
             if (department.getLectors() != null) {
                 LOG.info(String.format("%s\n", department.getLectors().size()));
             } else {
-                LOG.info(String.format("Department %s has no Lectors\n", departmentName));
+                LOG.warn(String.format(CC.YELLOW + "Department %s has no Lectors\n" + CC.RESET, departmentName));
             }
         } else {
-            LOG.info(String.format("Department %s is not exist.\n", departmentName));
+            showWarnTryFindDepartment(departmentName);
         }
     }
 
     private void showAverageSalaryByDepartmentName(String departmentName) {
-        showWarnTryFindDepartment(departmentName);
         Department department = departmentFacade.findByName(departmentName);
         if (department != null) {
             if (department.getLectors() != null) {
                 BigDecimal avgSalary = BigDecimal.valueOf(departmentFacade.getAvarageSalaryByDepartmentId(department.getId()));
                 LOG.info(String.format("The average salary of %s is %s\n", departmentName, avgSalary));
             } else {
-                LOG.info(String.format("Department %s has no Lectors\n", departmentName));
+                LOG.warn(String.format(CC.YELLOW + "Department %s has no Lectors\n" + CC.RESET, departmentName));
             }
         } else {
-            LOG.info(String.format("Department %s is not exist.\n", departmentName));
+            showWarnTryFindDepartment(departmentName);
         }
     }
 
     private void showStatistics(String departmentName) {
-        showWarnTryFindDepartment(departmentName);
         Department department = departmentFacade.findByName(departmentName);
         if (department != null) {
             if (department.getLectors() != null) {
@@ -158,29 +157,28 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
                         "\t\t\tassociate professors - %s\n" +
                         "\t\t\tprofessors - %s\n", countOfAssistants, countOfAssociateProfessors, countOfProfessors));
             } else {
-                LOG.info(String.format("Department %s has no Lectors", departmentName));
+                LOG.warn(String.format(CC.YELLOW + "Department %s has no Lectors" + CC.RESET, departmentName));
             }
         } else {
-            LOG.info(String.format("Department %s is not exist.", departmentName));
+            showWarnTryFindDepartment(departmentName);
         }
     }
 
     private void showHeadOfDepartment(String departmentName) {
-        showWarnTryFindDepartment(departmentName);
         Department department = departmentFacade.findByName(departmentName);
         if (department != null) {
             if (department.getName() != null) {
                 LOG.info(String.format("Head of %s department is %s\n", departmentName, department.getHeadLector().getFio()));
             } else {
-                LOG.info(String.format("Department %s has no Head\n", departmentName));
+                LOG.warn(String.format(CC.YELLOW + "Department %s has no Head\n" + CC.RESET, departmentName));
             }
         } else {
-            LOG.info(String.format("Department %s is not exist.\n", departmentName));
+            showWarnTryFindDepartment(departmentName);
         }
     }
 
     private void showWarnTryFindDepartment(String departmentName) {
-        //LOG.warn(String.format("Try to find department \"%s\".", departmentName));
+        LOG.error(String.format(CC.RED + "Department %s is not exist.\n" + CC.RESET, departmentName));
     }
 
     private void fillDB(Scanner in) {

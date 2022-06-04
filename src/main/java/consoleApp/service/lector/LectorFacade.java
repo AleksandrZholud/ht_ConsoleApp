@@ -1,5 +1,6 @@
 package consoleApp.service.lector;
 
+import consoleApp.aspects.CC;
 import consoleApp.domain.DEGREE;
 import consoleApp.domain.Lector;
 import org.slf4j.Logger;

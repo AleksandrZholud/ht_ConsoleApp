@@ -1,11 +1,13 @@
 package consoleApp.service.department;
 
+import consoleApp.aspects.CC;
 import consoleApp.domain.DEGREE;
 import consoleApp.domain.Department;
 import consoleApp.domain.Lector;
 import consoleApp.service.lector.LectorFacade;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.*;
 
 @Service
@@ -30,7 +32,6 @@ public class DepartmentFacade {
         Department department = departmentService.findByName(departmentName).orElse(null);
         if (department != null) {
             department.setHeadLector(lector);
-            System.out.printf("department{%s}.setHeadLector = OK\n", departmentName);
             return departmentService.save(department);
         } else return null;
     }
@@ -38,7 +39,7 @@ public class DepartmentFacade {
     public Lector addDepartmentToLector(Long lectorId, Department department) {
         department.addLector(lectorId);
         departmentService.save(department);
-        System.out.println("addLectorIntoDepartment OK");
+        System.out.println(CC.GREEN + "addLectorIntoDepartment OK" + CC.RESET);
         return lectorFacade.findById(lectorId);
     }
 
@@ -50,8 +51,12 @@ public class DepartmentFacade {
         if (!Objects.equals(namesSeparatedByComa, "")) {
             List<String> fios = new ArrayList<>(Arrays.asList(namesSeparatedByComa.split(",")));
             fios.forEach(departmentName -> {
-                departmentService.save(new Department(departmentName));
-                System.out.println(String.format("Department: %s saved.", departmentName));
+                try {
+                    departmentService.save(new Department(departmentName));
+                    System.out.println(String.format(CC.GREEN + "Department: %s saved." + CC.RESET, departmentName));
+                } catch (Exception e) {
+                    System.out.printf(CC.RED + "\t\t\t\t\t\t\t\t\tDepartment %s exist in DB\n" + CC.RESET, departmentName);
+                }
             });
         }
     }
