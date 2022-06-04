@@ -30,10 +30,45 @@ public class LectorFacade {
         if (!Objects.equals(fiosSeparatedByComa, "")) {
             List<String> fios = new ArrayList<>(Arrays.asList(fiosSeparatedByComa.split(",")));
             fios.forEach(lectorsName -> {
-                String[] names = lectorsName.split(" ");
-                Lector tmp = new Lector(names[0], names[1], DEGREE.ASSISTANT, BigDecimal.valueOf(1000));
-                lectorService.save(tmp);
-                System.out.println(String.format("Lector: %s %s saved.", names[0], names[1]));
+                try {
+                    String[] names = lectorsName.split(" ");
+
+                    Lector tmp = new Lector();
+                    if (names.length == 1) {
+                        if (names[0].equals("")) names[0] = "EmptyFIO";
+                        tmp.setName(names[0]);
+                        tmp.setLastName(names[0]);
+                    } else {
+                        if (names[0].equals("")) names[0] = "EmptyName";
+                        if (names[1].equals("")) names[1] = "EmptyLastName";
+                        tmp.setName(names[0]);
+                        tmp.setLastName(names[1]);
+                    }
+                    tmp.setFio(tmp.getName() + " " + tmp.getLastName());
+
+                    switch (new Random().nextInt(3)) {
+                        case 0:
+                            tmp.setDegree(DEGREE.ASSISTANT);
+                            tmp.setSalary(BigDecimal.valueOf(new Random().nextInt(10000)));
+                            break;
+                        case 1:
+                            tmp.setDegree(DEGREE.ASSOCIATE_PROFESSOR);
+                            tmp.setSalary(BigDecimal.valueOf(new Random().nextInt(10000)));
+                            break;
+                        default:
+                            tmp.setDegree(DEGREE.PROFESSOR);
+                            tmp.setSalary(BigDecimal.valueOf(new Random().nextInt(10000)));
+                            break;
+                    }
+                    try {
+                        lectorService.save(tmp);
+                        System.out.println(String.format(CC.GREEN + "Lector: {inputted = %s} \"%s %s\" saved." + CC.RESET, lectorsName, tmp.getName(), tmp.getLastName()));
+                    } catch (Exception e) {
+                        System.out.printf(CC.YELLOW + "\t\t\t\t\t\t\t\t\tLector %s exist in DB\n" + CC.RESET, tmp.getFio());
+                    }
+                } catch (Exception e) {
+                    System.out.printf(CC.RED + "\t\t\t\t\t\t\t\t\tSomething wrong with FIO input: \"%s\"\n" + CC.RESET, lectorsName);
+                }
             });
         }
     }

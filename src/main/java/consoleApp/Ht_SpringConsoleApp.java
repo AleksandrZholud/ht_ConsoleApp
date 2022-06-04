@@ -185,8 +185,8 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
 
     private void fillDB(Scanner in) {
         LOG.info("   ======   Input string Names For DEPARTMENTS   ======  ");
-        departmentFacade.fillDbDepartments(in.next());
+        departmentFacade.fillDbDepartments(in.next().toLowerCase());
         LOG.info("   ======   Input string Names For LECTORS   ======   ");
-        lectorFacade.fillDbLectors(in.next());
+        lectorFacade.fillDbLectors(in.next().toLowerCase());
     }
 }
