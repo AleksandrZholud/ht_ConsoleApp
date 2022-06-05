@@ -13,6 +13,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +43,7 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
     Scanner in = new Scanner(System.in).useDelimiter("\n");
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         LOG.warn(CC.YELLOW + "EXECUTING : command line runner" + CC.RESET);
 
         System.out.print(CC.YELLOW_BOLD + "\t\t\t\t\tInput your command, please: " + CC.RESET);
@@ -136,8 +138,8 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
         Department department = departmentFacade.findByName(departmentName);
         if (department != null) {
             if (department.getLectors() != null) {
-                BigDecimal avgSalary = BigDecimal.valueOf(departmentFacade.getAvarageSalaryByDepartmentId(department.getId()));
-                LOG.info(String.format("The average salary of %s is %s\n", departmentName, avgSalary));
+                BigDecimal avgSalary = departmentFacade.getAverageSalaryByDepartmentId(department.getId());
+                LOG.info(String.format("The average salary of %s is %s\n", departmentName, avgSalary.setScale(2, RoundingMode.HALF_UP)));
             } else {
                 LOG.warn(String.format(CC.YELLOW + "Department %s has no Lectors\n" + CC.RESET, departmentName));
             }

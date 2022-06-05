@@ -7,7 +7,8 @@ import consoleApp.domain.Lector;
 import consoleApp.service.lector.LectorFacade;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
+
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -65,8 +66,8 @@ public class DepartmentFacade {
         return departmentService.getCountOfLectorsByDepartmentIdAndDegree(id, degree);
     }
 
-    public long getAvarageSalaryByDepartmentId(Long id) {
-        return departmentService.getAvarageSalaryByDepartmentId(id);
+    public BigDecimal getAverageSalaryByDepartmentId(Long id) {
+        return departmentService.getAverageSalaryByDepartmentId(id);
     }
 
     public List<String> getAllNames() {

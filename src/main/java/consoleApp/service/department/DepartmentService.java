@@ -34,8 +34,8 @@ public class DepartmentService extends AbstractMainService<Department, Long, Dep
         return repository.getCountOfLectorsByDepartmentIdAndDegree(id, degree.toString());
     }
 
-    public long getAvarageSalaryByDepartmentId(Long id) {
-        return repository.getAvarageSalaryByDepartmentId(id);
+    public BigDecimal getAverageSalaryByDepartmentId(Long id) {
+        return repository.getAverageSalaryByDepartmentId(id);
     }
 
     public List<String> getAllNames() {
