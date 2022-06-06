@@ -82,8 +82,9 @@ public class DepartmentFacade {
     }
 
     public void showCountOfLectorsByDepartmentName(String departmentName) {
-        Department department = departmentService.findByName(departmentName).orElse(null);
-        if (department != null) {
+        Optional<Department> optDepartment = departmentService.findByName(departmentName);
+        if (optDepartment.isPresent()) {
+            Department department = optDepartment.get();
             if (department.getLectors() != null) {
                 System.out.printf("%s\n", department.getLectors().size());
             } else {
@@ -95,8 +96,9 @@ public class DepartmentFacade {
     }
 
     public void showHeadOfDepartment(String departmentName) {
-        Department department = departmentService.findByName(departmentName).orElse(null);
-        if (department != null) {
+        Optional<Department> optDepartment = departmentService.findByName(departmentName);
+        if (optDepartment.isPresent()) {
+            Department department = optDepartment.get();
             if (department.getName() != null) {
                 System.out.printf("Head of %s department is %s\n", departmentName, department.getHeadLector().getFullName());
             } else {
@@ -108,8 +110,9 @@ public class DepartmentFacade {
     }
 
     public void showStatistics(String departmentName) {
-        Department department = departmentService.findByName(departmentName).orElse(null);
-        if (department != null) {
+        Optional<Department> optDepartment = departmentService.findByName(departmentName);
+        if (optDepartment.isPresent()) {
+            Department department = optDepartment.get();
             if (department.getLectors() != null) {
                 int countOfAssistants = getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.ASSISTANT);
                 int countOfAssociateProfessors = getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.ASSOCIATE_PROFESSOR);
@@ -126,8 +129,9 @@ public class DepartmentFacade {
     }
 
     public void showAverageSalaryByDepartmentName(String departmentName) {
-        Department department = departmentService.findByName(departmentName).orElse(null);
-        if (department != null) {
+        Optional<Department> optDepartment = departmentService.findByName(departmentName);
+        if (optDepartment.isPresent()) {
+            Department department = optDepartment.get();
             if (department.getLectors() != null) {
                 BigDecimal avgSalary = getAverageSalaryByDepartmentId(department.getId());
                 System.out.printf("The average salary of %s is %s\n", departmentName, avgSalary.setScale(2, RoundingMode.HALF_UP));
