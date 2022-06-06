@@ -63,10 +63,11 @@ public class DepartmentFacade {
                     departmentService.save(new Department(departmentName));
                     System.out.printf(CC.GREEN + "Department: %s saved." + CC.RESET + "\n", departmentName);
                 } catch (Exception e) {
-                    System.out.printf(CC.RED + "\t\t\t\t\t\t\t\t\tDepartment %s exist in DB\n" + CC.RESET, departmentName);
+                    System.out.printf(CC.YELLOW + "\t\t\t\t\t\t\t\t\tDepartment %s exist in DB\n" + CC.RESET, departmentName);
                 }
             });
         }
+
     }
 
     public int getCountOfLectorsByDepartmentIdAndDegree(Long id, DEGREE degree) {

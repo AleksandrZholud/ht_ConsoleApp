@@ -8,6 +8,7 @@ import consoleApp.service.department.DepartmentFacade;
 import consoleApp.service.lector.LectorFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class Menu {
+@Component
+public class Menu implements CommandLineRunner {
 
     private final DepartmentFacade departmentFacade;
     private final LectorFacade lectorFacade;
@@ -31,7 +33,7 @@ public class Menu {
 
     Scanner in = new Scanner(System.in).useDelimiter("\n");
 
-    public void run(){
+    public void run() {
         LOG.warn(CC.YELLOW + "EXECUTING : command line runner" + CC.RESET);
 
         System.out.print(CC.YELLOW_BOLD + "\t\t\t\t\tInput your command, please: " + CC.RESET);
@@ -115,5 +117,10 @@ public class Menu {
         departmentFacade.fillDbDepartments(in.next().toLowerCase());
         LOG.info("   ======   Input string Names For LECTORS   ======   ");
         lectorFacade.fillDbLectors(in.next().toLowerCase());
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        this.run();
     }
 }
