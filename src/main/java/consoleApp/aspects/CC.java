@@ -15,5 +15,7 @@ public class CC {
     public static final String YELLOW_BOLD = "\033[1;33m"; // YELLOW
 
     // Background
-    public static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m";   // WHITE
+    private static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m";   // WHITE
+
+    public static final String WHITE_BACK_AND_BLACK_BOLD = WHITE_BACKGROUND_BRIGHT + BLACK_BOLD;
 }

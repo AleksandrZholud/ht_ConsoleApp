@@ -50,43 +50,43 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
         for (String command = in.next(); !command.equalsIgnoreCase("exit"); command = in.next()) {
             command = command.toLowerCase();
             try {
-                if (command.contains("who is head of department")) {
+                if (command.contains("who is head of department ")) {
                     String departmentName = command.substring("who is head of department ".length());
                     showHeadOfDepartment(departmentName);
 
-                } else if (command.contains("show") && command.contains("statistics")) {
+                } else if (command.contains("show ") && command.contains(" statistics")) {
                     String departmentName = Arrays.stream(command.split(" "))
                             .filter(s -> !s.equals("show") && !s.equals("statistics")).collect(Collectors.joining(" "));
                     showStatistics(departmentName);
 
-                } else if (command.contains("show the average salary for the department")) {
+                } else if (command.contains("show the average salary for the department ")) {
                     String departmentName = command.substring("show the average salary for the department ".length());
                     showAverageSalaryByDepartmentName(departmentName);
 
-                } else if (command.contains("show count of lectors for")) {
+                } else if (command.contains("show count of lectors for ")) {
                     String departmentName = command.substring("show count of lectors for ".length());
                     showCountOfLectorsByDepartmentName(departmentName);
 
-                } else if (command.contains("global search by")) {
+                } else if (command.contains("global search by ")) {
                     String template = command.substring("global search by ".length());
                     globalSearch(template);
 
-                } else if (command.contains("add lec into dep ")) {
+                } else if (command.contains("adDep ")) {
                     String lectorAndDepartment = command.substring("add lec into dep ".length());
                     addLectorIntoDepartment(lectorAndDepartment);
 
-                } else if (command.contains("set head ")) {
+                } else if (command.contains("head ")) {
                     String lectorAndDepartment = command.substring("set head ".length());
                     setHeadOfDepartment(lectorAndDepartment);
 
-                } else if (command.equals("1")) {
+                } else if (command.equals("fill")) {
                     fillDB(in);
 
                 } else {
                     LOG.error(CC.RED + "ERROR: Unknown command!" + CC.RESET);
                 }
             } catch (Exception e) {
-                LOG.error(CC.WHITE_BACKGROUND_BRIGHT + CC.BLACK_BOLD + "Application error! Something happened wrong!" + CC.RESET);
+                LOG.error(CC.WHITE_BACK_AND_BLACK_BOLD + "Application error! Something happened wrong!" + CC.RESET);
             }
             System.out.print(CC.YELLOW_BOLD + "\t\t\t\t\tInput your command, please: " + CC.RESET);
         }
@@ -180,7 +180,7 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
     }
 
     private void showWarnTryFindDepartment(String departmentName) {
-        LOG.error(String.format(CC.RED + "Department %s is not exist.\n" + CC.RESET, departmentName));
+        LOG.error(String.format(CC.RED + "Department %s doesn't exist.\n" + CC.RESET, departmentName));
     }
 
     private void fillDB(Scanner in) {
