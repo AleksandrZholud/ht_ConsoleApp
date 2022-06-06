@@ -1,7 +1,6 @@
 package consoleApp;
 
 import consoleApp.aspects.CC;
-import consoleApp.domain.DEGREE;
 import consoleApp.domain.Department;
 import consoleApp.domain.Lector;
 import consoleApp.service.department.DepartmentFacade;
@@ -12,9 +11,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,20 +48,20 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
             try {
                 if (command.contains("who is head of department ")) {
                     String departmentName = command.substring("who is head of department ".length());
-                    showHeadOfDepartment(departmentName);
+                    departmentFacade.showHeadOfDepartment(departmentName);
 
                 } else if (command.contains("show ") && command.contains(" statistics")) {
                     String departmentName = Arrays.stream(command.split(" "))
                             .filter(s -> !s.equals("show") && !s.equals("statistics")).collect(Collectors.joining(" "));
-                    showStatistics(departmentName);
+                    departmentFacade.showStatistics(departmentName);
 
                 } else if (command.contains("show the average salary for the department ")) {
                     String departmentName = command.substring("show the average salary for the department ".length());
-                    showAverageSalaryByDepartmentName(departmentName);
+                    departmentFacade.showAverageSalaryByDepartmentName(departmentName);
 
                 } else if (command.contains("show count of lectors for ")) {
                     String departmentName = command.substring("show count of lectors for ".length());
-                    showCountOfLectorsByDepartmentName(departmentName);
+                    departmentFacade.showCountOfLectorsByDepartmentName(departmentName);
 
                 } else if (command.contains("global search by ")) {
                     String template = command.substring("global search by ".length());
@@ -93,9 +89,9 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
     }
 
     private void addLectorIntoDepartment(String lectorAndDepartment) {
-        String lectorFio = lectorAndDepartment.split(",")[0];
+        String lectorFullName = lectorAndDepartment.split(",")[0];
         String departmentName = lectorAndDepartment.split(",")[1];
-        Lector lector = lectorFacade.findByFio(lectorFio);
+        Lector lector = lectorFacade.findByFullName(lectorFullName);
         Department department = departmentFacade.findByName(departmentName);
         if (lector != null && department != null) {
             departmentFacade.addDepartmentToLector(lector.getId(), department);
@@ -103,9 +99,9 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
     }
 
     private void setHeadOfDepartment(String lectorAndDepartment) {
-        String lectorFio = lectorAndDepartment.split(",")[0];
+        String lectorFullName = lectorAndDepartment.split(",")[0];
         String departmentName = lectorAndDepartment.split(",")[1];
-        Lector lector = lectorFacade.findByFio(lectorFio);
+        Lector lector = lectorFacade.findByFullName(lectorFullName);
         if (lector != null) {
             departmentFacade.setHeadOfDepartment(lector, departmentName);
             System.out.printf(CC.GREEN + "department %s.setHeadLector = OK\n" + CC.RESET, departmentName);
@@ -113,74 +109,12 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
     }
 
     private void globalSearch(String template) {
-        List<String> collectionOfAllLectorFiosAndDepartmentNames = lectorFacade.getAllFios();
-        collectionOfAllLectorFiosAndDepartmentNames.addAll(departmentFacade.getAllNames());
-        collectionOfAllLectorFiosAndDepartmentNames = new ArrayList<>(collectionOfAllLectorFiosAndDepartmentNames.stream()
+        List<String> collectionOfAllLectorFullNamesAndDepartmentNames = lectorFacade.getAllFullNames();
+        collectionOfAllLectorFullNamesAndDepartmentNames.addAll(departmentFacade.getAllNames());
+        collectionOfAllLectorFullNamesAndDepartmentNames = new ArrayList<>(collectionOfAllLectorFullNamesAndDepartmentNames.stream()
                 .filter(anyDepNameOrFio -> anyDepNameOrFio.toLowerCase().contains(template))
                 .collect(Collectors.toSet()));
-        LOG.info(String.join(",", collectionOfAllLectorFiosAndDepartmentNames));
-    }
-
-    private void showCountOfLectorsByDepartmentName(String departmentName) {
-        Department department = departmentFacade.findByName(departmentName);
-        if (department != null) {
-            if (department.getLectors() != null) {
-                LOG.info(String.format("%s\n", department.getLectors().size()));
-            } else {
-                LOG.warn(String.format(CC.YELLOW + "Department %s has no Lectors\n" + CC.RESET, departmentName));
-            }
-        } else {
-            showWarnTryFindDepartment(departmentName);
-        }
-    }
-
-    private void showAverageSalaryByDepartmentName(String departmentName) {
-        Department department = departmentFacade.findByName(departmentName);
-        if (department != null) {
-            if (department.getLectors() != null) {
-                BigDecimal avgSalary = departmentFacade.getAverageSalaryByDepartmentId(department.getId());
-                LOG.info(String.format("The average salary of %s is %s\n", departmentName, avgSalary.setScale(2, RoundingMode.HALF_UP)));
-            } else {
-                LOG.warn(String.format(CC.YELLOW + "Department %s has no Lectors\n" + CC.RESET, departmentName));
-            }
-        } else {
-            showWarnTryFindDepartment(departmentName);
-        }
-    }
-
-    private void showStatistics(String departmentName) {
-        Department department = departmentFacade.findByName(departmentName);
-        if (department != null) {
-            if (department.getLectors() != null) {
-                int countOfAssistants = departmentFacade.getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.ASSISTANT);
-                int countOfAssociateProfessors = departmentFacade.getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.ASSOCIATE_PROFESSOR);
-                int countOfProfessors = departmentFacade.getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.PROFESSOR);
-                LOG.info(String.format("\n\t\t\tassistans - %s\n" +
-                        "\t\t\tassociate professors - %s\n" +
-                        "\t\t\tprofessors - %s\n", countOfAssistants, countOfAssociateProfessors, countOfProfessors));
-            } else {
-                LOG.warn(String.format(CC.YELLOW + "Department %s has no Lectors" + CC.RESET, departmentName));
-            }
-        } else {
-            showWarnTryFindDepartment(departmentName);
-        }
-    }
-
-    private void showHeadOfDepartment(String departmentName) {
-        Department department = departmentFacade.findByName(departmentName);
-        if (department != null) {
-            if (department.getName() != null) {
-                LOG.info(String.format("Head of %s department is %s\n", departmentName, department.getHeadLector().getFio()));
-            } else {
-                LOG.warn(String.format(CC.YELLOW + "Department %s has no Head\n" + CC.RESET, departmentName));
-            }
-        } else {
-            showWarnTryFindDepartment(departmentName);
-        }
-    }
-
-    private void showWarnTryFindDepartment(String departmentName) {
-        LOG.error(String.format(CC.RED + "Department %s doesn't exist.\n" + CC.RESET, departmentName));
+        System.out.println(String.join(",", collectionOfAllLectorFullNamesAndDepartmentNames));
     }
 
     private void fillDB(Scanner in) {
