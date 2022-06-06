@@ -18,14 +18,6 @@ public class DepartmentService extends AbstractMainService<Department, Long, Dep
         this.departmentRepository = departmentRepository;
     }
 
-    public BigDecimal getAverageSalaryByDepartment(String departmentName) {
-        return null;
-    }
-
-    public int getCountOfLectors(String departmentName) {
-        return repository.getCountOfLectorsByDepartmentName(departmentName);
-    }
-
     public Optional<Department> findByName(String departmentName) {
         return departmentRepository.findByName(departmentName);
     }

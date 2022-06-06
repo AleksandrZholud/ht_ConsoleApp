@@ -10,8 +10,8 @@ import java.util.*;
 @Service
 public class LectorService extends AbstractMainService<Lector, Long, LectorsRepository> {
 
-    public Optional<Lector> findByFio(String fio){
-        return repository.findByFio(fio);
+    public Optional<Lector> findByFullName(String fio){
+        return repository.findByFullName(fio);
     }
 
     public Optional<Lector> findById(Long id){
@@ -22,7 +22,7 @@ public class LectorService extends AbstractMainService<Lector, Long, LectorsRepo
         return repository.findAllByDepartmentId(departmentId);
     }
 
-    public List<String> getAllFios() {
-        return repository.getAllFios();
+    public List<String> getAllFullNames() {
+        return repository.getAllFullNames();
     }
 }

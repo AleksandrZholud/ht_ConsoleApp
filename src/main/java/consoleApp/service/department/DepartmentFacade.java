@@ -27,25 +27,22 @@ public class DepartmentFacade {
         return departmentService.findByName(departmentName).orElse(null);
     }
 
-    public Department setHeadOfDepartment(Lector lector, String departmentName) {
+    public void setHeadOfDepartment(Lector lector, String departmentName) {
         lector = addDepartmentToLector(lector.getId(),
                 Objects.requireNonNull(departmentService.findByName(departmentName).orElse(null)));
         Department department = departmentService.findByName(departmentName).orElse(null);
         if (department != null) {
             department.setHeadLector(lector);
-            return departmentService.save(department);
-        } else return null;
+            departmentService.save(department);
+            System.out.println(CC.GREEN + "setHeadOfDepartment OK" + CC.RESET);
+        }
     }
 
     public Lector addDepartmentToLector(Long lectorId, Department department) {
         department.addLector(lectorId);
         departmentService.save(department);
         System.out.println(CC.GREEN + "addLectorIntoDepartment OK" + CC.RESET);
-        return lectorFacade.findById(lectorId);
-    }
-
-    public int getCountOfLectors(String nameDepartment) {
-        return departmentService.getCountOfLectors(nameDepartment);
+        return lectorService.findById(lectorId).orElse(null);
     }
 
     public void fillDbDepartments(String namesSeparatedByComa) {
@@ -54,7 +51,7 @@ public class DepartmentFacade {
             fios.forEach(departmentName -> {
                 try {
                     departmentService.save(new Department(departmentName));
-                    System.out.println(String.format(CC.GREEN + "Department: %s saved." + CC.RESET, departmentName));
+                    System.out.printf(CC.GREEN + "Department: %s saved." + CC.RESET + "\n", departmentName);
                 } catch (Exception e) {
                     System.out.printf(CC.RED + "\t\t\t\t\t\t\t\t\tDepartment %s exist in DB\n" + CC.RESET, departmentName);
                 }

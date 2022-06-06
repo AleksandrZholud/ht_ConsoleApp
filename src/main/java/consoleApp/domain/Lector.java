@@ -23,8 +23,8 @@ public class Lector {
     @Column(name = "lastName")
     private String lastName;
 
-    @Column(name = "FIO", unique = true)
-    private String fio;
+    @Column(name = "full_name", unique = true)
+    private String fullName;
 
     @Enumerated(value = EnumType.STRING)
     private DEGREE degree;
@@ -42,6 +42,6 @@ public class Lector {
         this.lastName = lastName;
         this.degree = degree;
         this.salary = salary;
-        fio = name + " " + lastName;
+        fullName = name + " " + lastName;
     }
 }

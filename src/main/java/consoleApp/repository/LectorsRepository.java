@@ -12,12 +12,12 @@ import java.util.Optional;
 @Repository
 public interface LectorsRepository extends JpaRepository<Lector, Long> {
 
-    Optional<Lector> findByFio(String aLong);
+    Optional<Lector> findByFullName(String aLong);
 
-    @Query(value = "select id, degree, fio, last_name, name, salary " +
+    @Query(value = "select id, degree, full_name, last_name, name, salary " +
             "from lectors as a inner join lector_department b on a.id = b.lector_id where b.department_id = :departmentId", nativeQuery = true)
     List<Lector> findAllByDepartmentId(Long departmentId);
 
-    @Query(value = "select fio from lectors", nativeQuery = true)
-    List<String> getAllFios();
+    @Query(value = "select full_name from lectors", nativeQuery = true)
+    List<String> getAllFullNames();
 }
