@@ -23,10 +23,12 @@ public class Ht_SpringConsoleApp implements CommandLineRunner {
         SpringApplication.run(Ht_SpringConsoleApp.class, args);
     }
 
-    Menu m = new Menu(departmentFacade, lectorFacade);
+    Menu menu() {
+        return new Menu(departmentFacade, lectorFacade);
+    }
 
     @Override
     public void run(String... args) {
-        m.run();
+        menu().run();
     }
 }
