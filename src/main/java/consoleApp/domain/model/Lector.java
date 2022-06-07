@@ -1,5 +1,6 @@
-package consoleApp.domain;
+package consoleApp.domain.model;
 
+import consoleApp.domain.enums.DEGREE;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 @Table(name = "lectors")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Lector {
+public class Lector implements IdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

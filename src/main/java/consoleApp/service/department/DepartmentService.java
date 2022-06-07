@@ -1,7 +1,7 @@
 package consoleApp.service.department;
 
-import consoleApp.domain.DEGREE;
-import consoleApp.domain.Department;
+import consoleApp.domain.enums.DEGREE;
+import consoleApp.domain.model.Department;
 import consoleApp.repository.DepartmentRepository;
 import consoleApp.service.AbstractMainService;
 import org.springframework.stereotype.Service;

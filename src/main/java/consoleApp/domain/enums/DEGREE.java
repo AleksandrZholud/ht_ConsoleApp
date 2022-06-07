@@ -1,4 +1,4 @@
-package consoleApp.domain;
+package consoleApp.domain.enums;
 
 import lombok.Getter;
 

@@ -1,6 +1,6 @@
 package consoleApp.repository;
 
-import consoleApp.domain.Department;
+import consoleApp.domain.model.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

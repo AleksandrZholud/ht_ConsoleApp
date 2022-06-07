@@ -2,8 +2,8 @@ package consoleApp.menu;
 
 import consoleApp.Ht_SpringConsoleApp;
 import consoleApp.aspects.CC;
-import consoleApp.domain.Department;
-import consoleApp.domain.Lector;
+import consoleApp.domain.model.Department;
+import consoleApp.domain.model.Lector;
 import consoleApp.service.department.DepartmentFacade;
 import consoleApp.service.lector.LectorFacade;
 import org.slf4j.Logger;
@@ -42,20 +42,20 @@ public class Menu implements CommandLineRunner {
             try {
                 if (command.contains("who is head of department ")) {
                     String departmentName = command.substring("who is head of department ".length());
-                    departmentFacade.showHeadOfDepartment(departmentName);
+                    System.out.println(departmentFacade.showHeadOfDepartment(departmentName));
 
                 } else if (command.contains("show ") && command.contains(" statistics")) {
                     String departmentName = Arrays.stream(command.split(" "))
                             .filter(s -> !s.equals("show") && !s.equals("statistics")).collect(Collectors.joining(" "));
-                    departmentFacade.showStatistics(departmentName);
+                    System.out.println(departmentFacade.showStatistics(departmentName));
 
                 } else if (command.contains("show the average salary for the department ")) {
                     String departmentName = command.substring("show the average salary for the department ".length());
-                    departmentFacade.showAverageSalaryByDepartmentName(departmentName);
+                    System.out.println(departmentFacade.showAverageSalaryByDepartmentName(departmentName));
 
                 } else if (command.contains("show count of lectors for ")) {
                     String departmentName = command.substring("show count of lectors for ".length());
-                    departmentFacade.showCountOfLectorsByDepartmentName(departmentName);
+                    System.out.println(departmentFacade.showCountOfLectorsByDepartmentName(departmentName));
 
                 } else if (command.contains("global search by ")) {
                     String template = command.substring("global search by ".length());
@@ -99,7 +99,7 @@ public class Menu implements CommandLineRunner {
         String departmentName = lectorAndDepartment.split(",")[1];
         Lector lector = lectorFacade.findByFullName(lectorFullName);
         if (lector != null) {
-            departmentFacade.setHeadOfDepartment(lector, departmentName);
+            departmentFacade.setHeadOfDepartment(lector.getId(), departmentName);
         }
     }
 

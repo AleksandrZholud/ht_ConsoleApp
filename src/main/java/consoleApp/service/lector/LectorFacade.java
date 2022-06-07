@@ -1,8 +1,8 @@
 package consoleApp.service.lector;
 
 import consoleApp.aspects.CC;
-import consoleApp.domain.DEGREE;
-import consoleApp.domain.Lector;
+import consoleApp.domain.enums.DEGREE;
+import consoleApp.domain.model.Lector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

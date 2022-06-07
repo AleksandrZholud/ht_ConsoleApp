@@ -1,7 +1,7 @@
 package consoleApp.repository;
 
 
-import consoleApp.domain.Lector;
+import consoleApp.domain.model.Lector;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

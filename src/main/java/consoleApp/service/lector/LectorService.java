@@ -1,6 +1,6 @@
 package consoleApp.service.lector;
 
-import consoleApp.domain.Lector;
+import consoleApp.domain.model.Lector;
 import consoleApp.repository.LectorsRepository;
 import consoleApp.service.AbstractMainService;
 import org.springframework.stereotype.Service;

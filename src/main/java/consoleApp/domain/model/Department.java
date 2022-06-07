@@ -1,4 +1,4 @@
-package consoleApp.domain;
+package consoleApp.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.util.Set;
 @Table(name = "departments")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Department {
+public class Department implements IdEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

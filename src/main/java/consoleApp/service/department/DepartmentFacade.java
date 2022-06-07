@@ -2,18 +2,19 @@ package consoleApp.service.department;
 
 import consoleApp.Ht_SpringConsoleApp;
 import consoleApp.aspects.CC;
-import consoleApp.domain.DEGREE;
-import consoleApp.domain.Department;
-import consoleApp.domain.Lector;
+import consoleApp.domain.enums.DEGREE;
+import consoleApp.domain.model.Department;
+import consoleApp.domain.model.Lector;
+import consoleApp.exceptions.DepartmentDoesNotExistException;
 import consoleApp.service.lector.LectorService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class DepartmentFacade {
@@ -26,26 +27,21 @@ public class DepartmentFacade {
         this.lectorService = lectorService;
     }
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(Ht_SpringConsoleApp.class);
-
-    private void showErrorOfFindDepartment(String departmentName) {
-        LOG.error(String.format(CC.RED + "Department %s doesn't exist.\n" + CC.RESET, departmentName));
-    }
-
     public Department findByName(String departmentName) {
         return departmentService.findByName(departmentName).orElse(null);
     }
 
-    public void setHeadOfDepartment(Lector lector, String departmentName) {
-        lector = addDepartmentToLector(lector.getId(),
+    public void setHeadOfDepartment(Long lectorId, String departmentName) {
+
+        Lector finalLector = addDepartmentToLector(lectorId,
                 Objects.requireNonNull(departmentService.findByName(departmentName).orElse(null)));
-        Department department = departmentService.findByName(departmentName).orElse(null);
-        if (department != null) {
-            department.setHeadLector(lector);
+
+        departmentService.findByName(departmentName).map(department -> {
+            department.setHeadLector(finalLector);
             departmentService.save(department);
             System.out.println(CC.GREEN + "setHeadOfDepartment OK" + CC.RESET);
-        }
+            return null;
+        });
     }
 
     public Lector addDepartmentToLector(Long lectorId, Department department) {
@@ -63,7 +59,7 @@ public class DepartmentFacade {
                     departmentService.save(new Department(departmentName));
                     System.out.printf(CC.GREEN + "Department: %s saved." + CC.RESET + "\n", departmentName);
                 } catch (Exception e) {
-                    System.out.printf(CC.YELLOW + "\t\t\t\t\t\t\t\t\tDepartment %s exist in DB\n" + CC.RESET, departmentName);
+                    System.out.printf(CC.YELLOW + CC.TABS + "Department %s exist in DB\n" + CC.RESET, departmentName);
                 }
             });
         }
@@ -82,65 +78,65 @@ public class DepartmentFacade {
         return departmentService.getAllNames();
     }
 
-    public void showCountOfLectorsByDepartmentName(String departmentName) {
-        Optional<Department> optDepartment = departmentService.findByName(departmentName);
-        if (optDepartment.isPresent()) {
-            Department department = optDepartment.get();
-            if (department.getLectors() != null) {
-                System.out.printf("%s\n", department.getLectors().size());
-            } else {
-                LOG.warn(String.format(CC.YELLOW + "Department %s has no Lectors\n" + CC.RESET, departmentName));
-            }
+    public String showCountOfLectorsByDepartmentName(String departmentName) {
+        return departmentService.findByName(departmentName)
+                .map(department -> getOutputStringOfSizeLectorList(departmentName, department))
+                .orElseGet(DepartmentDoesNotExistException::throwMessage);
+    }
+
+    private String getOutputStringOfSizeLectorList(String departmentName, Department department) {
+        if (department.getLectors() != null) {
+            return String.format("%s\n", department.getLectors().size());
         } else {
-            showErrorOfFindDepartment(departmentName);
+            return String.format(CC.YELLOW + "Department %s has no Lectors\n" + CC.RESET, departmentName);
         }
     }
 
-    public void showHeadOfDepartment(String departmentName) {
-        Optional<Department> optDepartment = departmentService.findByName(departmentName);
-        if (optDepartment.isPresent()) {
-            Department department = optDepartment.get();
-            if (department.getName() != null) {
-                System.out.printf("Head of %s department is %s\n", departmentName, department.getHeadLector().getFullName());
-            } else {
-                LOG.warn(String.format(CC.YELLOW + "Department %s has no Head\n" + CC.RESET, departmentName));
-            }
+    public String showHeadOfDepartment(String departmentName) {
+        return departmentService.findByName(departmentName)
+                .map(department -> getOutputStringOfHead(departmentName, department))
+                .orElseGet(DepartmentDoesNotExistException::throwMessage);
+    }
+
+    private String getOutputStringOfHead(String departmentName, Department department) {
+        if (department.getName() != null) {
+            return String.format("Head of %s department is %s\n", departmentName, department.getHeadLector().getFullName());
         } else {
-            showErrorOfFindDepartment(departmentName);
+            return String.format(CC.YELLOW + "Department %s has no Head\n" + CC.RESET, departmentName);
         }
     }
 
-    public void showStatistics(String departmentName) {
-        Optional<Department> optDepartment = departmentService.findByName(departmentName);
-        if (optDepartment.isPresent()) {
-            Department department = optDepartment.get();
-            if (department.getLectors() != null) {
-                int countOfAssistants = getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.ASSISTANT);
-                int countOfAssociateProfessors = getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.ASSOCIATE_PROFESSOR);
-                int countOfProfessors = getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.PROFESSOR);
-                System.out.printf("assistants - %s\n" +
-                        "associate professors - %s\n" +
-                        "professors - %s\n", countOfAssistants, countOfAssociateProfessors, countOfProfessors);
-            } else {
-                LOG.warn(String.format(CC.YELLOW + "Department %s has no Lectors" + CC.RESET, departmentName));
-            }
+    public String showStatistics(String departmentName) {
+        return departmentService.findByName(departmentName)
+                .map(department -> getOutputStringOfStatistics(departmentName, department))
+                .orElseGet(DepartmentDoesNotExistException::throwMessage);
+    }
+
+    private String getOutputStringOfStatistics(String departmentName, Department department) {
+        if (department.getLectors() != null) {
+            int countOfAssistants = getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.ASSISTANT);
+            int countOfAssociateProfessors = getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.ASSOCIATE_PROFESSOR);
+            int countOfProfessors = getCountOfLectorsByDepartmentIdAndDegree(department.getId(), DEGREE.PROFESSOR);
+            return String.format("assistants - %s\n" +
+                    "associate professors - %s\n" +
+                    "professors - %s\n", countOfAssistants, countOfAssociateProfessors, countOfProfessors);
         } else {
-            showErrorOfFindDepartment(departmentName);
+            return String.format(CC.YELLOW + "Department %s has no Lectors" + CC.RESET, departmentName);
         }
     }
 
-    public void showAverageSalaryByDepartmentName(String departmentName) {
-        Optional<Department> optDepartment = departmentService.findByName(departmentName);
-        if (optDepartment.isPresent()) {
-            Department department = optDepartment.get();
-            if (department.getLectors() != null) {
-                BigDecimal avgSalary = getAverageSalaryByDepartmentId(department.getId());
-                System.out.printf("The average salary of %s is %s\n", departmentName, avgSalary.setScale(2, RoundingMode.HALF_UP));
-            } else {
-                LOG.warn(String.format(CC.YELLOW + "Department %s has no Lectors\n" + CC.RESET, departmentName));
-            }
+    public String showAverageSalaryByDepartmentName(String departmentName) {
+        return departmentService.findByName(departmentName)
+                .map(department -> getOutputStringOfAverageSalary(departmentName, department))
+                .orElseGet(DepartmentDoesNotExistException::throwMessage);
+    }
+
+    private String getOutputStringOfAverageSalary(String departmentName, Department department) {
+        if (department.getLectors() != null) {
+            BigDecimal avgSalary = getAverageSalaryByDepartmentId(department.getId());
+            return String.format("The average salary of %s is %s\n", departmentName, avgSalary.setScale(2, RoundingMode.HALF_UP));
         } else {
-            showErrorOfFindDepartment(departmentName);
+            return String.format(CC.YELLOW + "Department %s has no Lectors\n" + CC.RESET, departmentName);
         }
     }
 }
