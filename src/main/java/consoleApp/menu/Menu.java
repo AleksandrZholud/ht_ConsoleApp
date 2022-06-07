@@ -1,13 +1,10 @@
 package consoleApp.menu;
 
-import consoleApp.Ht_SpringConsoleApp;
-import consoleApp.aspects.CC;
+import consoleApp.aspects.ConsoleColors;
 import consoleApp.domain.model.Department;
 import consoleApp.domain.model.Lector;
 import consoleApp.service.department.DepartmentFacade;
 import consoleApp.service.lector.LectorFacade;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -28,15 +25,12 @@ public class Menu implements CommandLineRunner {
         this.lectorFacade = lectorFacade;
     }
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(Ht_SpringConsoleApp.class);
-
     Scanner in = new Scanner(System.in).useDelimiter("\n");
 
     public void run() {
-        LOG.warn(CC.YELLOW + "EXECUTING : command line runner" + CC.RESET);
+        OutputResult.showResult(ConsoleColors.YELLOW + "EXECUTING : command line runner" + ConsoleColors.RESET);
+        OutputResult.showResult(ConsoleColors.YELLOW_BOLD + ConsoleColors.TABS + "Input your command, please: " + ConsoleColors.RESET);
 
-        System.out.print(CC.YELLOW_BOLD + "\t\t\t\t\tInput your command, please: " + CC.RESET);
         for (String command = in.next(); !command.equalsIgnoreCase("exit"); command = in.next()) {
             command = command.toLowerCase();
             try {
@@ -73,15 +67,15 @@ public class Menu implements CommandLineRunner {
                     fillDB(in);
 
                 } else {
-                    LOG.error(CC.RED + "ERROR: Unknown command!" + CC.RESET);
+                    OutputResult.showResult(ConsoleColors.RED + "ERROR: Unknown command!" + ConsoleColors.RESET);
                 }
             } catch (Exception e) {
-                LOG.error(CC.WHITE_BACK_AND_BLACK_BOLD + "Application error! Something happened wrong!" + CC.RESET);
+                OutputResult.showResult(ConsoleColors.WHITE_BACK_AND_BLACK_BOLD + "Application error! Something happened wrong!" + ConsoleColors.RESET);
             }
-            System.out.print(CC.YELLOW_BOLD + "\t\t\t\t\tInput your command, please: " + CC.RESET);
+            OutputResult.showResult(ConsoleColors.YELLOW_BOLD + ConsoleColors.TABS + "Input your command, please: " + ConsoleColors.RESET);
         }
 
-        LOG.warn(CC.YELLOW_BOLD + "APPLICATION FINISHED" + CC.RESET);
+        OutputResult.showResult(ConsoleColors.YELLOW_BOLD + "APPLICATION FINISHED" + ConsoleColors.RESET);
     }
 
     private void addLectorIntoDepartment(String lectorAndDepartment) {
@@ -113,9 +107,9 @@ public class Menu implements CommandLineRunner {
     }
 
     private void fillDB(Scanner in) {
-        LOG.info("   ======   Input string Names For DEPARTMENTS   ======  ");
+        OutputResult.showResult("   ======   Input string Names For DEPARTMENTS   ======  ");
         departmentFacade.fillDbDepartments(in.next().toLowerCase());
-        LOG.info("   ======   Input string Names For LECTORS   ======   ");
+        OutputResult.showResult("   ======   Input string Names For LECTORS   ======   ");
         lectorFacade.fillDbLectors(in.next().toLowerCase());
     }
 

@@ -1,9 +1,9 @@
 package consoleApp.exceptions;
 
-import consoleApp.aspects.CC;
+import consoleApp.aspects.ConsoleColors;
 
 public class DepartmentDoesNotExistException {
     public static String throwMessage() {
-        return CC.RED + "Department doesn't exist.\n" + CC.RESET;
+        return ConsoleColors.RED + "Department doesn't exist.\n" + ConsoleColors.RESET;
     }
 }

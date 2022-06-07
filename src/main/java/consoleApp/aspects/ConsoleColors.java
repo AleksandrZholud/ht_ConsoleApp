@@ -1,7 +1,7 @@
 package consoleApp.aspects;
 
 //ConsoleColors
-public class CC {
+public class ConsoleColors {
     // Reset
     public static final String RESET = "\033[0m";  // Text Reset
 

@@ -1,10 +1,9 @@
 package consoleApp.service.lector;
 
-import consoleApp.aspects.CC;
+import consoleApp.aspects.ConsoleColors;
 import consoleApp.domain.enums.DEGREE;
 import consoleApp.domain.model.Lector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import consoleApp.menu.OutputResult;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,61 +18,36 @@ public class LectorFacade {
         this.lectorService = lectorService;
     }
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(LectorService.class);
-
-
     public Lector findByFullName(String lectorsFIO) {
         return lectorService.findByFullName(lectorsFIO).orElse(null);
     }
 
-    public void fillDbLectors(String fiosSeparatedByComa) {
-        if (!Objects.equals(fiosSeparatedByComa, "")) {
-            List<String> fios = new ArrayList<>(Arrays.asList(fiosSeparatedByComa.split(",")));
-            fios.forEach(lectorsName -> {
+    public void fillDbLectors(String fullNamesSeparatedByComa) {
+        if (!Objects.equals(fullNamesSeparatedByComa, "")) {
+            List<String> fullNames = new ArrayList<>(Arrays.asList(fullNamesSeparatedByComa.split(",")));
+            fullNames.forEach(fullName -> {
                 try {
-                    String[] names = lectorsName.split(" ");
-
-                    String name;
-                    String lastName;
-                    int randomSalary;
-                    DEGREE degree;
-
-                    if (names.length == 1) {
-                        if (names[0].equals("")) names[0] = "0";
-                        name = names[0];
-                        lastName = names[0];
-                    } else {
-                        if (names[0].equals("")) names[0] = "0";
-                        if (names[1].equals("")) names[1] = "0";
-                        name = names[0];
-                        lastName = names[1];
-                    }
-
-                    switch (new Random().nextInt(3)) {
-                        case 0:
-                            degree = DEGREE.ASSISTANT;
-                            randomSalary = new Random().nextInt(10000);
-                            break;
-                        case 1:
-                            degree = DEGREE.ASSOCIATE_PROFESSOR;
-                            randomSalary = new Random().nextInt(10000);
-                            break;
-                        default:
-                            degree = DEGREE.PROFESSOR;
-                            randomSalary = new Random().nextInt(10000);
-                            break;
-                    }
-
-                    Lector tmp = new Lector(name, lastName, degree, BigDecimal.valueOf(randomSalary));
+                    String[] fullNameSplattedBySpace = fullName.split(" ");
+                    Lector lector = getLectorFromTwoStrings(fullNameSplattedBySpace);
                     try {
-                        lectorService.save(tmp);
-                        System.out.println(String.format(CC.GREEN + "Lector: {inputted = %s} \"%s %s\" saved." + CC.RESET, lectorsName, tmp.getName(), tmp.getLastName()));
+                        lectorService.save(lector);
+                        OutputResult.showResult(
+                                String.format(
+                                        ConsoleColors.GREEN + "Lector: {inputted = %s} \"%s %s\" saved." + ConsoleColors.RESET,
+                                        fullName,
+                                        lector.getName(),
+                                        lector.getLastName()));
                     } catch (Exception e) {
-                        System.out.printf(CC.YELLOW + "\t\t\t\t\t\t\t\t\tLector %s exist in DB\n" + CC.RESET, tmp.getFullName());
+                        OutputResult.showResult(
+                                String.format(
+                                        ConsoleColors.YELLOW + ConsoleColors.TABS + "Lector %s exist in DB\n" + ConsoleColors.RESET,
+                                        lector.getFullName()));
                     }
                 } catch (Exception e) {
-                    System.out.printf(CC.RED + "\t\t\t\t\t\t\t\t\tSomething wrong with FIO input: \"%s\"\n" + CC.RESET, lectorsName);
+                    OutputResult.showResult(
+                            String.format(
+                                    ConsoleColors.RED + ConsoleColors.TABS + "Something wrong with FIO input: \"%s\"\n" + ConsoleColors.RESET,
+                                    fullName));
                 }
             });
         }
@@ -81,5 +55,41 @@ public class LectorFacade {
 
     public List<String> getAllFullNames() {
         return lectorService.getAllFullNames();
+    }
+
+    private DEGREE getRandomDegree() {
+        DEGREE degree;
+        switch (new Random().nextInt(3)) {
+            case 0:
+                degree = DEGREE.ASSISTANT;
+                break;
+            case 1:
+                degree = DEGREE.ASSOCIATE_PROFESSOR;
+                break;
+            default:
+                degree = DEGREE.PROFESSOR;
+                break;
+        }
+        return degree;
+    }
+
+    private Lector getLectorFromTwoStrings(String[] fullNameSplattedBySpace) {
+        String name;
+        String lastName;
+        int randomSalary = new Random().nextInt(10000);
+        DEGREE degree = getRandomDegree();
+
+        if (fullNameSplattedBySpace.length == 1) {
+            return new Lector(fullNameSplattedBySpace[0], fullNameSplattedBySpace[0], degree, BigDecimal.valueOf(randomSalary));
+        }
+
+        if (fullNameSplattedBySpace[0].equals("") || fullNameSplattedBySpace[1].equals("")) {
+            fullNameSplattedBySpace[0] = "0";
+            fullNameSplattedBySpace[1] = "0";
+        }
+        name = fullNameSplattedBySpace[0];
+        lastName = fullNameSplattedBySpace[1];
+
+        return new Lector(name, lastName, degree, BigDecimal.valueOf(randomSalary));
     }
 }

@@ -11,7 +11,6 @@ public class CheckLectorsAvarageSalary implements CheckError {
         this.salary = salary;
     }
 
-    @Override
     public boolean check() {
         return false;
     }

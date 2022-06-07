@@ -1,7 +1,6 @@
 package consoleApp.service.department;
 
-import consoleApp.Ht_SpringConsoleApp;
-import consoleApp.aspects.CC;
+import consoleApp.aspects.ConsoleColors;
 import consoleApp.domain.enums.DEGREE;
 import consoleApp.domain.model.Department;
 import consoleApp.domain.model.Lector;
@@ -39,7 +38,7 @@ public class DepartmentFacade {
         departmentService.findByName(departmentName).map(department -> {
             department.setHeadLector(finalLector);
             departmentService.save(department);
-            System.out.println(CC.GREEN + "setHeadOfDepartment OK" + CC.RESET);
+            System.out.println(ConsoleColors.GREEN + "setHeadOfDepartment OK" + ConsoleColors.RESET);
             return null;
         });
     }
@@ -47,7 +46,7 @@ public class DepartmentFacade {
     public Lector addDepartmentToLector(Long lectorId, Department department) {
         department.addLector(lectorId);
         departmentService.save(department);
-        System.out.println(CC.GREEN + "addLectorIntoDepartment OK" + CC.RESET);
+        System.out.println(ConsoleColors.GREEN + "addLectorIntoDepartment OK" + ConsoleColors.RESET);
         return lectorService.findById(lectorId).orElse(null);
     }
 
@@ -57,9 +56,9 @@ public class DepartmentFacade {
             fios.forEach(departmentName -> {
                 try {
                     departmentService.save(new Department(departmentName));
-                    System.out.printf(CC.GREEN + "Department: %s saved." + CC.RESET + "\n", departmentName);
+                    System.out.printf(ConsoleColors.GREEN + "Department: %s saved." + ConsoleColors.RESET + "\n", departmentName);
                 } catch (Exception e) {
-                    System.out.printf(CC.YELLOW + CC.TABS + "Department %s exist in DB\n" + CC.RESET, departmentName);
+                    System.out.printf(ConsoleColors.YELLOW + ConsoleColors.TABS + "Department %s exist in DB\n" + ConsoleColors.RESET, departmentName);
                 }
             });
         }
@@ -88,7 +87,7 @@ public class DepartmentFacade {
         if (department.getLectors() != null) {
             return String.format("%s\n", department.getLectors().size());
         } else {
-            return String.format(CC.YELLOW + "Department %s has no Lectors\n" + CC.RESET, departmentName);
+            return String.format(ConsoleColors.YELLOW + "Department %s has no Lectors\n" + ConsoleColors.RESET, departmentName);
         }
     }
 
@@ -102,7 +101,7 @@ public class DepartmentFacade {
         if (department.getName() != null) {
             return String.format("Head of %s department is %s\n", departmentName, department.getHeadLector().getFullName());
         } else {
-            return String.format(CC.YELLOW + "Department %s has no Head\n" + CC.RESET, departmentName);
+            return String.format(ConsoleColors.YELLOW + "Department %s has no Head\n" + ConsoleColors.RESET, departmentName);
         }
     }
 
@@ -121,7 +120,7 @@ public class DepartmentFacade {
                     "associate professors - %s\n" +
                     "professors - %s\n", countOfAssistants, countOfAssociateProfessors, countOfProfessors);
         } else {
-            return String.format(CC.YELLOW + "Department %s has no Lectors" + CC.RESET, departmentName);
+            return String.format(ConsoleColors.YELLOW + "Department %s has no Lectors" + ConsoleColors.RESET, departmentName);
         }
     }
 
@@ -136,7 +135,7 @@ public class DepartmentFacade {
             BigDecimal avgSalary = getAverageSalaryByDepartmentId(department.getId());
             return String.format("The average salary of %s is %s\n", departmentName, avgSalary.setScale(2, RoundingMode.HALF_UP));
         } else {
-            return String.format(CC.YELLOW + "Department %s has no Lectors\n" + CC.RESET, departmentName);
+            return String.format(ConsoleColors.YELLOW + "Department %s has no Lectors\n" + ConsoleColors.RESET, departmentName);
         }
     }
 }
