@@ -2,7 +2,7 @@ package consoleApp.menu.menuItems;
 
 import consoleApp.aspects.ConsoleColors;
 import consoleApp.menu.MenuItem;
-import consoleApp.menu.OutputMessage;
+import consoleApp.UI.OutputMessage;
 
 public class ExitingMenuItem extends MenuItem {
     public ExitingMenuItem() {
@@ -11,6 +11,6 @@ public class ExitingMenuItem extends MenuItem {
 
     @Override
     public void exec() {
-        OutputMessage.showMessage(ConsoleColors.YELLOW + "BYE BYE! \r\n" + ConsoleColors.RESET);
+        OutputMessage.showLoggedMessage(ConsoleColors.YELLOW + "BYE BYE! \r\n" + ConsoleColors.RESET);
     }
 }

@@ -1,5 +1,6 @@
 package consoleApp.menu;
 
+import consoleApp.UI.OutputMessage;
 import consoleApp.aspects.ConsoleColors;
 import consoleApp.menu.menuItems.*;
 import consoleApp.service.SearchService;
@@ -44,23 +45,23 @@ public class Menu implements CommandLineRunner {
 
 
     private int getUserChoice() {
-        OutputMessage.showMessage(ConsoleColors.YELLOW_BOLD + ConsoleColors.TABS + "Choose Menu item");
+        OutputMessage.showLoggedMessage(ConsoleColors.YELLOW + ConsoleColors.YELLOW_BOLD + "Choose Menu item");
         int choice = in.nextInt() - 1;
         in.nextLine();
         return choice;
     }
 
     private void showMenu() {
-        OutputMessage.showMessage("-------------MENU----------------");
+        OutputMessage.sout("-------------MENU----------------");
         for (int i = 0; i < items.length; i++) {
-            OutputMessage.showMessage(i + 1 + ". " + items[i].getName());
+            OutputMessage.sout(i + 1 + ". " + items[i].getName());
         }
-        OutputMessage.showMessage("---------------------------------");
+        OutputMessage.sout("---------------------------------");
 
     }
 
     public void run() {
-        OutputMessage.showMessage(ConsoleColors.YELLOW + "EXECUTING : command line runner");
+        OutputMessage.showLoggedMessage(ConsoleColors.YELLOW + "EXECUTING : command line runner");
 
         while (true) {
             showMenu();
@@ -68,20 +69,20 @@ public class Menu implements CommandLineRunner {
             try {
                 choice = getUserChoice();
             } catch (InputMismatchException e) {
-                OutputMessage.showMessage(ConsoleColors.WHITE_BACK_AND_BLACK_BOLD + "Input should be a number!");
+                OutputMessage.showLoggedMessage(ConsoleColors.WHITE_BACK_AND_BLACK_BOLD + "Input should be a number!");
                 in.nextLine();
                 continue;
             }
 
             if (isChoiceInvalid(choice)) {
-                OutputMessage.showMessage(ConsoleColors.WHITE_BACK_AND_BLACK_BOLD + "Try again!");
+                OutputMessage.sout(ConsoleColors.WHITE_BACK_AND_BLACK_BOLD + "Try again!");
                 continue;
             }
             items[choice].exec();
             if (items[choice].closeAfter()) break;
         }
 
-        OutputMessage.showMessage(ConsoleColors.YELLOW_BOLD + "APPLICATION FINISHED");
+        OutputMessage.showLoggedMessage(ConsoleColors.YELLOW_BOLD + "APPLICATION FINISHED");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

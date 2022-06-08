@@ -1,7 +1,7 @@
 package consoleApp.menu.menuItems;
 
 import consoleApp.menu.MenuItem;
-import consoleApp.menu.OutputMessage;
+import consoleApp.UI.OutputMessage;
 import consoleApp.service.SearchService;
 
 import java.util.Scanner;
@@ -19,8 +19,8 @@ public class ShowEmployeesAndDepartmentsByTemplateMenuItem extends MenuItem {
 
     @Override
     public void exec() {
-        OutputMessage.showMessage("Input your template");
+        OutputMessage.sout("Input your template");
         String template = in.next();
-        OutputMessage.showMessage(searchService.globalSearch(template));
+        searchService.globalSearch(template).showMessage();
     }
 }

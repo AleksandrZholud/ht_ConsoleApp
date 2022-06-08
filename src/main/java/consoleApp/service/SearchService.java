@@ -1,5 +1,6 @@
 package consoleApp.service;
 
+import consoleApp.UI.OutputMessage;
 import consoleApp.service.department.DepartmentService;
 import consoleApp.service.lector.LectorService;
 import org.springframework.stereotype.Component;
@@ -19,12 +20,12 @@ public class SearchService {
         this.departmentService = departmentService;
     }
 
-    public String globalSearch(String template) {
+    public OutputMessage globalSearch(String template) {
         List<String> collectionOfAllLectorFullNamesAndDepartmentNames = lectorService.getAllFullNames();
         collectionOfAllLectorFullNamesAndDepartmentNames.addAll(departmentService.getAllNames());
         collectionOfAllLectorFullNamesAndDepartmentNames = new ArrayList<>(collectionOfAllLectorFullNamesAndDepartmentNames.stream()
                 .filter(anyDepNameOrFio -> anyDepNameOrFio.toLowerCase().contains(template))
                 .collect(Collectors.toSet()));
-        return String.join(",", collectionOfAllLectorFullNamesAndDepartmentNames);
+        return new OutputMessage(String.join(",", collectionOfAllLectorFullNamesAndDepartmentNames));
     }
 }

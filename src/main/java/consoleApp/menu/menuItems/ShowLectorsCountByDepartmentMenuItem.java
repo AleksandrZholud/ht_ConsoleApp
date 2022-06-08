@@ -1,7 +1,7 @@
 package consoleApp.menu.menuItems;
 
 import consoleApp.menu.MenuItem;
-import consoleApp.menu.OutputMessage;
+import consoleApp.UI.OutputMessage;
 import consoleApp.service.department.DepartmentFacade;
 
 import java.util.Scanner;
@@ -19,8 +19,8 @@ public class ShowLectorsCountByDepartmentMenuItem extends MenuItem {
 
     @Override
     public void exec() {
-        OutputMessage.showMessage("Input department name");
+        OutputMessage.sout("Input department name");
         String departmentName = in.next();
-        OutputMessage.showMessage(departmentFacade.showCountOfLectorsByDepartmentName(departmentName));
+        departmentFacade.showCountOfLectorsByDepartmentName(departmentName).showMessage();
     }
 }

@@ -3,7 +3,7 @@ package consoleApp.service.lector;
 import consoleApp.aspects.ConsoleColors;
 import consoleApp.domain.enums.DEGREE;
 import consoleApp.domain.model.Lector;
-import consoleApp.menu.OutputMessage;
+import consoleApp.UI.OutputMessage;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -31,14 +31,14 @@ public class LectorFacade {
                     Lector lector = getLectorFromTwoStrings(fullNameSplattedBySpace);
                     try {
                         lectorService.save(lector);
-                        OutputMessage.showMessage(String.format(ConsoleColors.GREEN + "Lector: {inputted = %s} \"%s %s\" saved." + ConsoleColors.RESET,
+                        OutputMessage.showLoggedMessage(String.format(ConsoleColors.GREEN + "Lector: {inputted = %s} \"%s %s\" saved." + ConsoleColors.RESET,
                                 fullName, lector.getName(), lector.getLastName()));
                     } catch (Exception e) {
-                        OutputMessage.showMessage(String.format(ConsoleColors.YELLOW + ConsoleColors.TABS + "Lector %s exist in DB\n" + ConsoleColors.RESET,
+                        OutputMessage.showLoggedMessage(String.format(ConsoleColors.YELLOW + "Lector %s exist in DB\n" + ConsoleColors.RESET,
                                 lector.getFullName()));
                     }
                 } catch (Exception e) {
-                    OutputMessage.showMessage(String.format(ConsoleColors.RED + ConsoleColors.TABS + "Something wrong with FIO input: \"%s\"\n" + ConsoleColors.RESET,
+                    OutputMessage.showLoggedMessage(String.format(ConsoleColors.RED + "Something wrong with FIO input: \"%s\"\n" + ConsoleColors.RESET,
                             fullName));
                 }
             });

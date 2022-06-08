@@ -18,6 +18,4 @@ public class ConsoleColors {
     private static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m";   // WHITE
 
     public static final String WHITE_BACK_AND_BLACK_BOLD = WHITE_BACKGROUND_BRIGHT + BLACK_BOLD;
-
-    public static final String TABS = "\t";
 }
