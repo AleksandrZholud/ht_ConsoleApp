@@ -26,6 +26,25 @@ public class DepartmentFacade {
         this.lectorService = lectorService;
     }
 
+    private void addLectorIntoDepartment(String lectorAndDepartment) {
+        String lectorFullName = lectorAndDepartment.split(",")[0];
+        String departmentName = lectorAndDepartment.split(",")[1];
+        Lector lector = lectorService.findByFullName(lectorFullName);
+        Department department = findByName(departmentName);
+        if (lector != null && department != null) {
+            addDepartmentToLector(lector.getId(), department);
+        }
+    }
+
+    private void setHeadOfDepartment(String lectorAndDepartment) {
+        String lectorFullName = lectorAndDepartment.split(",")[0];
+        String departmentName = lectorAndDepartment.split(",")[1];
+        Lector lector = lectorService.findByFullName(lectorFullName);
+        if (lector != null) {
+            setHeadOfDepartment(lector.getId(), departmentName);
+        }
+    }
+
     public Department findByName(String departmentName) {
         return departmentService.findByName(departmentName).orElse(null);
     }

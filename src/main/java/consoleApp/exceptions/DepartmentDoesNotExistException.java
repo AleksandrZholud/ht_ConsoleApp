@@ -4,6 +4,6 @@ import consoleApp.aspects.ConsoleColors;
 
 public class DepartmentDoesNotExistException {
     public static String throwMessage() {
-        return ConsoleColors.RED + "Department doesn't exist.\n" + ConsoleColors.RESET;
+        return ConsoleColors.RED + "Department doesn't exist.\n";
     }
 }

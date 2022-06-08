@@ -1,61 +1,91 @@
 package consoleApp.menu;
 
 import consoleApp.aspects.ConsoleColors;
-import consoleApp.domain.model.Department;
-import consoleApp.domain.model.Lector;
+import consoleApp.menu.menuItems.*;
+import consoleApp.service.SearchService;
 import consoleApp.service.department.DepartmentFacade;
 import consoleApp.service.lector.LectorFacade;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 @Component
 public class Menu implements CommandLineRunner {
 
     private final DepartmentFacade departmentFacade;
     private final LectorFacade lectorFacade;
+    private final SearchService searchService;
 
-    public Menu(DepartmentFacade departmentFacade, LectorFacade lectorFacade) {
+    public Menu(DepartmentFacade departmentFacade, LectorFacade lectorFacade, SearchService searchService) {
         this.departmentFacade = departmentFacade;
         this.lectorFacade = lectorFacade;
+        this.searchService = searchService;
+        items = new MenuItem[]{
+                new ShowHeadOfDepartmentMenuItem(departmentFacade, in),
+                new ShowStatByDepartmentMenuItem(departmentFacade, in),
+                new ShowAverageSalaryMenuItem(departmentFacade, in),
+                new ShowLectorsCountByDepartmentMenuItem(departmentFacade, in),
+                new ShowEmployeesAndDepartmentsByTemplateMenuItem(searchService, in),
+                new ExitingMenuItem()
+                //new SaveDepartmentMenuItem(in),
+                //new SaveLectorMenuItem(in),
+                //new AppointHeadOfDepartmentMenuItem(in),
+        };
     }
 
+    MenuItem[] items;
     Scanner in = new Scanner(System.in).useDelimiter("\n");
 
+    private boolean isChoiceInvalid(int choice) {
+        return choice < 0 || choice >= items.length;
+    }
+
+
+    private int getUserChoice() {
+        OutputMessage.showMessage(ConsoleColors.YELLOW_BOLD + ConsoleColors.TABS + "Choose Menu item");
+        int choice = in.nextInt() - 1;
+        in.nextLine();
+        return choice;
+    }
+
+    private void showMenu() {
+        OutputMessage.showMessage("-------------MENU----------------");
+        for (int i = 0; i < items.length; i++) {
+            OutputMessage.showMessage(i + 1 + ". " + items[i].getName());
+        }
+        OutputMessage.showMessage("---------------------------------");
+
+    }
+
     public void run() {
-        OutputResult.showResult(ConsoleColors.YELLOW + "EXECUTING : command line runner" + ConsoleColors.RESET);
-        OutputResult.showResult(ConsoleColors.YELLOW_BOLD + ConsoleColors.TABS + "Input your command, please: " + ConsoleColors.RESET);
+        OutputMessage.showMessage(ConsoleColors.YELLOW + "EXECUTING : command line runner");
 
-        for (String command = in.next(); !command.equalsIgnoreCase("exit"); command = in.next()) {
-            command = command.toLowerCase();
+        while (true) {
+            showMenu();
+            int choice;
             try {
-                if (command.contains("who is head of department ")) {
-                    String departmentName = command.substring("who is head of department ".length());
-                    System.out.println(departmentFacade.showHeadOfDepartment(departmentName));
+                choice = getUserChoice();
+            } catch (InputMismatchException e) {
+                OutputMessage.showMessage(ConsoleColors.WHITE_BACK_AND_BLACK_BOLD + "Input should be a number!");
+                in.nextLine();
+                continue;
+            }
 
-                } else if (command.contains("show ") && command.contains(" statistics")) {
-                    String departmentName = Arrays.stream(command.split(" "))
-                            .filter(s -> !s.equals("show") && !s.equals("statistics")).collect(Collectors.joining(" "));
-                    System.out.println(departmentFacade.showStatistics(departmentName));
+            if (isChoiceInvalid(choice)) {
+                OutputMessage.showMessage(ConsoleColors.WHITE_BACK_AND_BLACK_BOLD + "Try again!");
+                continue;
+            }
+            items[choice].exec();
+            if (items[choice].closeAfter()) break;
+        }
 
-                } else if (command.contains("show the average salary for the department ")) {
-                    String departmentName = command.substring("show the average salary for the department ".length());
-                    System.out.println(departmentFacade.showAverageSalaryByDepartmentName(departmentName));
+        OutputMessage.showMessage(ConsoleColors.YELLOW_BOLD + "APPLICATION FINISHED");
 
-                } else if (command.contains("show count of lectors for ")) {
-                    String departmentName = command.substring("show count of lectors for ".length());
-                    System.out.println(departmentFacade.showCountOfLectorsByDepartmentName(departmentName));
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                } else if (command.contains("global search by ")) {
-                    String template = command.substring("global search by ".length());
-                    globalSearch(template);
-
-                } else if (command.contains("add ")) {
+           /*     } else if (command.contains("add ")) {
                     String lectorAndDepartment = command.substring("add ".length());
                     addLectorIntoDepartment(lectorAndDepartment);
 
@@ -66,52 +96,17 @@ public class Menu implements CommandLineRunner {
                 } else if (command.equals("fill")) {
                     fillDB(in);
 
-                } else {
-                    OutputResult.showResult(ConsoleColors.RED + "ERROR: Unknown command!" + ConsoleColors.RESET);
-                }
-            } catch (Exception e) {
-                OutputResult.showResult(ConsoleColors.WHITE_BACK_AND_BLACK_BOLD + "Application error! Something happened wrong!" + ConsoleColors.RESET);
-            }
-            OutputResult.showResult(ConsoleColors.YELLOW_BOLD + ConsoleColors.TABS + "Input your command, please: " + ConsoleColors.RESET);
-        }
+              */
 
-        OutputResult.showResult(ConsoleColors.YELLOW_BOLD + "APPLICATION FINISHED" + ConsoleColors.RESET);
     }
 
-    private void addLectorIntoDepartment(String lectorAndDepartment) {
-        String lectorFullName = lectorAndDepartment.split(",")[0];
-        String departmentName = lectorAndDepartment.split(",")[1];
-        Lector lector = lectorFacade.findByFullName(lectorFullName);
-        Department department = departmentFacade.findByName(departmentName);
-        if (lector != null && department != null) {
-            departmentFacade.addDepartmentToLector(lector.getId(), department);
-        }
-    }
-
-    private void setHeadOfDepartment(String lectorAndDepartment) {
-        String lectorFullName = lectorAndDepartment.split(",")[0];
-        String departmentName = lectorAndDepartment.split(",")[1];
-        Lector lector = lectorFacade.findByFullName(lectorFullName);
-        if (lector != null) {
-            departmentFacade.setHeadOfDepartment(lector.getId(), departmentName);
-        }
-    }
-
-    private void globalSearch(String template) {
-        List<String> collectionOfAllLectorFullNamesAndDepartmentNames = lectorFacade.getAllFullNames();
-        collectionOfAllLectorFullNamesAndDepartmentNames.addAll(departmentFacade.getAllNames());
-        collectionOfAllLectorFullNamesAndDepartmentNames = new ArrayList<>(collectionOfAllLectorFullNamesAndDepartmentNames.stream()
-                .filter(anyDepNameOrFio -> anyDepNameOrFio.toLowerCase().contains(template))
-                .collect(Collectors.toSet()));
-        System.out.println(String.join(",", collectionOfAllLectorFullNamesAndDepartmentNames));
-    }
-
-    private void fillDB(Scanner in) {
-        OutputResult.showResult("   ======   Input string Names For DEPARTMENTS   ======  ");
-        departmentFacade.fillDbDepartments(in.next().toLowerCase());
-        OutputResult.showResult("   ======   Input string Names For LECTORS   ======   ");
-        lectorFacade.fillDbLectors(in.next().toLowerCase());
-    }
+//
+//    private void fillDB(Scanner in) {
+//        OutputMessage.showMessage("   ======   Input string Names For DEPARTMENTS   ======  ");
+//        departmentFacade.fillDbDepartments(in.next().toLowerCase());
+//        OutputMessage.showMessage("   ======   Input string Names For LECTORS   ======   ");
+//        lectorFacade.fillDbLectors(in.next().toLowerCase());
+//    }
 
     @Override
     public void run(String... args) throws Exception {

@@ -19,5 +19,5 @@ public class ConsoleColors {
 
     public static final String WHITE_BACK_AND_BLACK_BOLD = WHITE_BACKGROUND_BRIGHT + BLACK_BOLD;
 
-    public static final String TABS = "\t\t\t\t\t\t\t\t\t";
+    public static final String TABS = "\t";
 }
