@@ -1,5 +1,6 @@
 package consoleApp.menu.menuItems;
 
+import consoleApp.aspects.ConsoleColors;
 import consoleApp.menu.MenuItem;
 import consoleApp.UI.OutputMessage;
 import consoleApp.service.SearchService;
@@ -19,7 +20,7 @@ public class ShowEmployeesAndDepartmentsByTemplateMenuItem extends MenuItem {
 
     @Override
     public void exec() {
-        OutputMessage.sout("Input your template");
+        OutputMessage.sout(ConsoleColors.YELLOW + "Input your template");
         String template = in.next();
         searchService.globalSearch(template).showMessage();
     }

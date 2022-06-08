@@ -27,11 +27,11 @@ public class OutputMessage {
         }
     }
 
-    public static void sout(String message){
+    public static void sout(String message) {
         System.out.println(message + ConsoleColors.RESET);
     }
 
     public void showMessage() {
-        System.out.println(message + ConsoleColors.RESET);
+        System.out.println(ConsoleColors.YELLOW + "Output:\t" + ConsoleColors.RESET + message + ConsoleColors.RESET);
     }
 }

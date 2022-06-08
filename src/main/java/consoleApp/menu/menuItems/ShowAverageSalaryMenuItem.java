@@ -1,5 +1,6 @@
 package consoleApp.menu.menuItems;
 
+import consoleApp.aspects.ConsoleColors;
 import consoleApp.menu.MenuItem;
 import consoleApp.UI.OutputMessage;
 import consoleApp.service.department.DepartmentFacade;
@@ -19,7 +20,7 @@ public class ShowAverageSalaryMenuItem extends MenuItem {
 
     @Override
     public void exec() {
-        OutputMessage.sout("Input department name");
+        OutputMessage.sout(ConsoleColors.YELLOW + "Input department name");
         String departmentName = in.next();
         departmentFacade.showAverageSalaryByDepartmentName(departmentName).showMessage();
     }

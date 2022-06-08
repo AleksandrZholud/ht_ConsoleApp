@@ -11,6 +11,7 @@ public class ExitingMenuItem extends MenuItem {
 
     @Override
     public void exec() {
-        OutputMessage.showLoggedMessage(ConsoleColors.YELLOW + "BYE BYE! \r\n" + ConsoleColors.RESET);
+        OutputMessage.sout(ConsoleColors.YELLOW + "BYE BYE! " + ConsoleColors.RESET);
+        OutputMessage.showLoggedMessage(ConsoleColors.YELLOW + "BYE BYE! " + ConsoleColors.RESET);
     }
 }

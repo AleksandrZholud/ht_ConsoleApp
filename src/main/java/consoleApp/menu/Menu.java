@@ -5,7 +5,6 @@ import consoleApp.aspects.ConsoleColors;
 import consoleApp.menu.menuItems.*;
 import consoleApp.service.SearchService;
 import consoleApp.service.department.DepartmentFacade;
-import consoleApp.service.lector.LectorFacade;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -15,14 +14,7 @@ import java.util.Scanner;
 @Component
 public class Menu implements CommandLineRunner {
 
-    private final DepartmentFacade departmentFacade;
-    private final LectorFacade lectorFacade;
-    private final SearchService searchService;
-
-    public Menu(DepartmentFacade departmentFacade, LectorFacade lectorFacade, SearchService searchService) {
-        this.departmentFacade = departmentFacade;
-        this.lectorFacade = lectorFacade;
-        this.searchService = searchService;
+    public Menu(DepartmentFacade departmentFacade, SearchService searchService) {
         items = new MenuItem[]{
                 new ShowHeadOfDepartmentMenuItem(departmentFacade, in),
                 new ShowStatByDepartmentMenuItem(departmentFacade, in),
@@ -45,23 +37,23 @@ public class Menu implements CommandLineRunner {
 
 
     private int getUserChoice() {
-        OutputMessage.showLoggedMessage(ConsoleColors.YELLOW + ConsoleColors.YELLOW_BOLD + "Choose Menu item");
+        OutputMessage.sout(ConsoleColors.YELLOW_BOLD + "Choose Menu item");
         int choice = in.nextInt() - 1;
         in.nextLine();
         return choice;
     }
 
     private void showMenu() {
-        OutputMessage.sout("-------------MENU----------------");
+        OutputMessage.sout(ConsoleColors.GREEN + "-------------MENU----------------");
         for (int i = 0; i < items.length; i++) {
-            OutputMessage.sout(i + 1 + ". " + items[i].getName());
+            OutputMessage.sout(ConsoleColors.GREEN + (i + 1) + ". " + items[i].getName());
         }
-        OutputMessage.sout("---------------------------------");
+        OutputMessage.sout(ConsoleColors.GREEN + "---------------------------------");
 
     }
 
     public void run() {
-        OutputMessage.showLoggedMessage(ConsoleColors.YELLOW + "EXECUTING : command line runner");
+        OutputMessage.showLoggedMessage(ConsoleColors.YELLOW_BOLD + "EXECUTING : command line runner");
 
         while (true) {
             showMenu();

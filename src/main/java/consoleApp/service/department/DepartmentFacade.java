@@ -100,7 +100,7 @@ public class DepartmentFacade {
     public OutputMessage showCountOfLectorsByDepartmentName(String departmentName) {
         return new OutputMessage(departmentService.findByName(departmentName)
                 .map(department -> getOutputStringOfSizeLectorList(departmentName, department))
-                .orElseGet(DepartmentDoesNotExistException::throwMessage));
+                .orElseGet(DepartmentDoesNotExistException::generateMessage));
     }
 
     private String getOutputStringOfSizeLectorList(String departmentName, Department department) {
@@ -114,21 +114,27 @@ public class DepartmentFacade {
     public OutputMessage showHeadOfDepartment(String departmentName) {
         return new OutputMessage(departmentService.findByName(departmentName)
                 .map(department -> getOutputStringOfHead(departmentName, department))
-                .orElseGet(DepartmentDoesNotExistException::throwMessage));
+                .orElseGet(DepartmentDoesNotExistException::generateMessage));
     }
 
     private String getOutputStringOfHead(String departmentName, Department department) {
         if (department.getName() != null) {
+            try{
+                department.getHeadLector().getFullName();
+            }
+            catch (Exception e){
+                return String.format(ConsoleColors.YELLOW + "Department %s has no Head\n" + ConsoleColors.RESET, departmentName);
+            }
             return String.format("Head of %s department is %s\n", departmentName, department.getHeadLector().getFullName());
         } else {
-            return String.format(ConsoleColors.YELLOW + "Department %s has no Head\n" + ConsoleColors.RESET, departmentName);
+            return DepartmentDoesNotExistException.generateMessage();
         }
     }
 
     public OutputMessage showStatistics(String departmentName) {
         return new OutputMessage(departmentService.findByName(departmentName)
                 .map(department -> getOutputStringOfStatistics(departmentName, department))
-                .orElseGet(DepartmentDoesNotExistException::throwMessage));
+                .orElseGet(DepartmentDoesNotExistException::generateMessage));
     }
 
     private String getOutputStringOfStatistics(String departmentName, Department department) {
@@ -147,7 +153,7 @@ public class DepartmentFacade {
     public OutputMessage showAverageSalaryByDepartmentName(String departmentName) {
         return new OutputMessage(departmentService.findByName(departmentName)
                 .map(department -> getOutputStringOfAverageSalary(departmentName, department))
-                .orElseGet(DepartmentDoesNotExistException::throwMessage));
+                .orElseGet(DepartmentDoesNotExistException::generateMessage));
     }
 
     private String getOutputStringOfAverageSalary(String departmentName, Department department) {
