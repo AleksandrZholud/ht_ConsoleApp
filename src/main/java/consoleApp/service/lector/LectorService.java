@@ -6,19 +6,20 @@ import consoleApp.domain.enums.DEGREE;
 import consoleApp.domain.model.Lector;
 import consoleApp.repository.LectorsRepository;
 import consoleApp.service.AbstractMainService;
+import consoleApp.service.Validate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 @Service
-public class LectorService extends AbstractMainService<Lector, Long, LectorsRepository> {
+public class LectorService extends AbstractMainService<Lector, LectorsRepository> {
 
-    public Lector findByFullName(String fio){
-        return repository.findByFullName(fio).orElse(null);
+    public Lector findByFullName(String fullName) {
+        return repository.findByFullName(fullName).orElse(null);
     }
 
-    public Optional<Lector> findById(Long id){
+    public Optional<Lector> findById(Long id) {
         return repository.findById(id);
     }
 
@@ -34,14 +35,14 @@ public class LectorService extends AbstractMainService<Lector, Long, LectorsRepo
         if (!fullNamesSeparatedByComa.isEmpty()) {
             List<String> fullNames = new ArrayList<>(Arrays.asList(fullNamesSeparatedByComa.split(",")));
 
-            fullNames.stream().filter(this::validateInput).forEach(fullName -> {
+            fullNames.stream().filter(Validate::validateLectorNameInput).forEach(fullName -> {
                 Lector lector = getNewLectorFromString(fullName);
                 try {
-                    repository.save(getNewLectorFromString(fullName));
-                    OutputMessage.showLoggedMessage(String.format(ConsoleColors.GREEN + "Lector: {inputted = %s} \"%s %s\" saved." + ConsoleColors.RESET,
+                    repository.save(lector);
+                    OutputMessage.sout(String.format(ConsoleColors.GREEN + "Lector: {inputted = %s} \"%s %s\" saved." + ConsoleColors.RESET,
                             fullName, lector.getName(), lector.getLastName()));
                 } catch (Exception e) {
-                    OutputMessage.showLoggedMessage(String.format(ConsoleColors.YELLOW + "Lector %s exist in DB\n" + ConsoleColors.RESET,
+                    OutputMessage.sout(String.format(ConsoleColors.YELLOW + "Lector %s exist in DB\n" + ConsoleColors.RESET,
                             lector.getFullName()));
                 }
             });
@@ -49,19 +50,14 @@ public class LectorService extends AbstractMainService<Lector, Long, LectorsRepo
     }
 
     private DEGREE getRandomDegree() {
-        DEGREE degree;
         switch (new Random().nextInt(3)) {
             case 0:
-                degree = DEGREE.ASSISTANT;
-                break;
+                return DEGREE.ASSISTANT;
             case 1:
-                degree = DEGREE.ASSOCIATE_PROFESSOR;
-                break;
+                return DEGREE.ASSOCIATE_PROFESSOR;
             default:
-                degree = DEGREE.PROFESSOR;
-                break;
+                return DEGREE.PROFESSOR;
         }
-        return degree;
     }
 
     private Lector getNewLectorFromString(String fullName) {
@@ -72,13 +68,5 @@ public class LectorService extends AbstractMainService<Lector, Long, LectorsRepo
         int randomSalary = new Random().nextInt(10000);
 
         return new Lector(name, lastName, degree, BigDecimal.valueOf(randomSalary));
-    }
-
-    private boolean validateInput(String fullName) {
-        String[] fullNameSplattedBySpace = fullName.split(" ");
-        if (fullNameSplattedBySpace[0].equals("") || fullNameSplattedBySpace[1].equals("")) {
-            return false;
-        }
-        return fullNameSplattedBySpace.length == 2;
     }
 }

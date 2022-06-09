@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Service
-public class DepartmentService extends AbstractMainService<Department, Long, DepartmentRepository> {
+public class DepartmentService extends AbstractMainService<Department, DepartmentRepository> {
 
     private final DepartmentRepository departmentRepository;
 

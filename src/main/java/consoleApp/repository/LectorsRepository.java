@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface LectorsRepository extends JpaRepository<Lector, Long> {
 
-    Optional<Lector> findByFullName(String aLong);
+    Optional<Lector> findByFullName(String fullName);
 
     @Query(value = "select id, degree, full_name, last_name, name, salary " +
             "from lectors as a inner join lector_department b on a.id = b.lector_id where b.department_id = :departmentId", nativeQuery = true)

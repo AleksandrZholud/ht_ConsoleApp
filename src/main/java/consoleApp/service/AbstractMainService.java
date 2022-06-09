@@ -8,12 +8,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractMainService<E, Z, T extends JpaRepository<E, Z>> {
+public abstract class AbstractMainService<E, T extends JpaRepository<E, Long>> {
 
     @Autowired
     protected T repository;
 
-    public Optional<E> findById(Z id) {
+    public Optional<E> findById(Long id) {
         return repository.findById(id);
     }
 
@@ -38,11 +38,11 @@ public abstract class AbstractMainService<E, Z, T extends JpaRepository<E, Z>> {
         this.repository.deleteAll(massDeletionIterable);
     }
 
-    public void deleteById(Z id) {
+    public void deleteById(Long id) {
         this.repository.deleteById(id);
     }
 
-    public E getOne(Z id) {
+    public E getOne(Long id) {
         return repository.getOne(id);
     }
 }
