@@ -7,22 +7,17 @@ import consoleApp.service.AbstractMainService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DepartmentService extends AbstractMainService<Department, DepartmentRepository> {
 
-    private final DepartmentRepository departmentRepository;
-
-    public DepartmentService(DepartmentRepository departmentRepository) {
-        this.departmentRepository = departmentRepository;
-    }
-
     public Optional<Department> findByName(String departmentName) {
-        return departmentRepository.findByName(departmentName);
+        return repository.findByName(departmentName);
     }
 
-    public int getCountOfLectorsByDepartmentIdAndDegree(Long id, DEGREE degree){
+    public int getCountOfLectorsByDepartmentIdAndDegree(Long id, DEGREE degree) {
         return repository.getCountOfLectorsByDepartmentIdAndDegree(id, degree.toString());
     }
 

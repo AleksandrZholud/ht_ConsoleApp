@@ -31,6 +31,10 @@ public class OutputMessage {
         System.out.println(message + ConsoleColors.RESET);
     }
 
+    public static void soutInline(String message) {
+        System.out.print(ConsoleColors.YELLOW + message + ConsoleColors.RESET);
+    }
+
     public void showMessage() {
         System.out.println(ConsoleColors.YELLOW + "Output:\t" + ConsoleColors.RESET + message + ConsoleColors.RESET);
     }

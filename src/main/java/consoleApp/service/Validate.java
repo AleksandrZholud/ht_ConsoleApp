@@ -12,4 +12,8 @@ public class Validate {
             return false;
         }
     }
+
+    public static boolean validateInputByComa(String input) {
+        return input.split(",").length > 0;
+    }
 }

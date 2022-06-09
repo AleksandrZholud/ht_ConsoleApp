@@ -5,7 +5,6 @@ import consoleApp.service.department.DepartmentService;
 import consoleApp.service.lector.LectorService;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,11 +20,11 @@ public class SearchService {
     }
 
     public OutputMessage globalSearch(String template) {
-        List<String> collectionOfAllLectorFullNamesAndDepartmentNames = lectorService.getAllFullNames();
-        collectionOfAllLectorFullNamesAndDepartmentNames.addAll(departmentService.getAllNames());
-        collectionOfAllLectorFullNamesAndDepartmentNames = new ArrayList<>(collectionOfAllLectorFullNamesAndDepartmentNames.stream()
+        List<String> collectionOfAllLectorFullNamesAndDepartmentNames = lectorService.getAllFullNames().stream().sorted().collect(Collectors.toList());
+        collectionOfAllLectorFullNamesAndDepartmentNames.addAll(departmentService.getAllNames().stream().sorted().collect(Collectors.toList()));
+        collectionOfAllLectorFullNamesAndDepartmentNames = collectionOfAllLectorFullNamesAndDepartmentNames.stream()
                 .filter(anyDepNameOrFio -> anyDepNameOrFio.toLowerCase().contains(template))
-                .collect(Collectors.toSet()));
+                .collect(Collectors.toList());
         return new OutputMessage(String.join(",", collectionOfAllLectorFullNamesAndDepartmentNames));
     }
 }

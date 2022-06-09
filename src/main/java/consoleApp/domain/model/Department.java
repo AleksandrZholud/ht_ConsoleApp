@@ -7,6 +7,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,11 +16,12 @@ import java.util.Set;
 @Table(name = "departments")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Department implements IdEntity{
+public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Size(min = 3, max = 40)
     @Column(name = "name", unique = true)
     private String name;
 
@@ -29,11 +31,9 @@ public class Department implements IdEntity{
             name = "lector_department",
             joinColumns = @JoinColumn(name = "department_id"))
     @Column(name = "lector_id")
-    //@UniqueElements(message = "Lector is exist")
-    //@NotEmpty(message = "You can't create Department without any Lector")
     private Set<Long> lectors = new HashSet<>();
 
-    public void addLector(Long lectorId){
+    public void addLector(Long lectorId) {
         lectors.add(lectorId);
     }
 
@@ -47,10 +47,5 @@ public class Department implements IdEntity{
 
     public Department(String name) {
         this.name = name;
-    }
-
-    public Department(String name, Lector headLector) {
-        this.name = name;
-        this.headLector = headLector;
     }
 }

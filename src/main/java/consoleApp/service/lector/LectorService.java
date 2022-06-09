@@ -15,8 +15,8 @@ import java.util.*;
 @Service
 public class LectorService extends AbstractMainService<Lector, LectorsRepository> {
 
-    public Lector findByFullName(String fullName) {
-        return repository.findByFullName(fullName).orElse(null);
+    public Optional<Lector> findByFullName(String fullName) {
+        return repository.findByFullName(fullName);
     }
 
     public Optional<Lector> findById(Long id) {
@@ -31,22 +31,26 @@ public class LectorService extends AbstractMainService<Lector, LectorsRepository
         return repository.getAllFullNames();
     }
 
-    public void fillDbLectors(String fullNamesSeparatedByComa) {
+    public List<OutputMessage> fillDbLectors(String fullNamesSeparatedByComa) {
+        List<OutputMessage> outputMessageList = new ArrayList<>();
         if (!fullNamesSeparatedByComa.isEmpty()) {
             List<String> fullNames = new ArrayList<>(Arrays.asList(fullNamesSeparatedByComa.split(",")));
 
-            fullNames.stream().filter(Validate::validateLectorNameInput).forEach(fullName -> {
+            fullNames.stream().filter(Validate::validateInputByComa).filter(Validate::validateLectorNameInput).forEach(fullName -> {
                 Lector lector = getNewLectorFromString(fullName);
                 try {
-                    repository.save(lector);
-                    OutputMessage.sout(String.format(ConsoleColors.GREEN + "Lector: {inputted = %s} \"%s %s\" saved." + ConsoleColors.RESET,
-                            fullName, lector.getName(), lector.getLastName()));
+                    this.save(lector);
+                    outputMessageList.add(new OutputMessage(String.format(ConsoleColors.GREEN + "Lector: {inputted = %s} \"%s %s\" saved.",
+                            fullName, lector.getName(), lector.getLastName())));
                 } catch (Exception e) {
-                    OutputMessage.sout(String.format(ConsoleColors.YELLOW + "Lector %s exist in DB\n" + ConsoleColors.RESET,
-                            lector.getFullName()));
+                    outputMessageList.add(new OutputMessage(String.format(ConsoleColors.YELLOW + "Lector %s exist in DB\n",
+                            lector.getFullName())));
                 }
             });
+        } else {
+            outputMessageList.add(new OutputMessage(ConsoleColors.YELLOW + "Empty input"));
         }
+        return outputMessageList;
     }
 
     private DEGREE getRandomDegree() {

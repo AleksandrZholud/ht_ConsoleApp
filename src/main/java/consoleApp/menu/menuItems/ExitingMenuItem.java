@@ -1,8 +1,8 @@
 package consoleApp.menu.menuItems;
 
+import consoleApp.UI.OutputMessage;
 import consoleApp.aspects.ConsoleColors;
 import consoleApp.menu.MenuItem;
-import consoleApp.UI.OutputMessage;
 
 public class ExitingMenuItem extends MenuItem {
     public ExitingMenuItem() {
@@ -11,6 +11,6 @@ public class ExitingMenuItem extends MenuItem {
 
     @Override
     public void exec() {
-        OutputMessage.sout(ConsoleColors.YELLOW + "BYE BYE! " + ConsoleColors.RESET);
+        OutputMessage.sout(ConsoleColors.YELLOW + "BYE BYE!");
     }
 }

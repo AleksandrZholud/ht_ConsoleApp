@@ -5,6 +5,7 @@ import consoleApp.aspects.ConsoleColors;
 import consoleApp.menu.menuItems.*;
 import consoleApp.service.SearchService;
 import consoleApp.service.department.DepartmentFacade;
+import consoleApp.service.lector.LectorService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -14,17 +15,17 @@ import java.util.Scanner;
 @Component
 public class Menu implements CommandLineRunner {
 
-    public Menu(DepartmentFacade departmentFacade, SearchService searchService) {
+    public Menu(DepartmentFacade departmentFacade, SearchService searchService, LectorService lectorService) {
         items = new MenuItem[]{
                 new ShowHeadOfDepartmentMenuItem(departmentFacade, in),
                 new ShowStatByDepartmentMenuItem(departmentFacade, in),
                 new ShowAverageSalaryMenuItem(departmentFacade, in),
                 new ShowLectorsCountByDepartmentMenuItem(departmentFacade, in),
                 new ShowEmployeesAndDepartmentsByTemplateMenuItem(searchService, in),
+                //new SaveDepartmentMenuItem(departmentFacade, in),
+                //new SaveLectorMenuItem(lectorService, in),
+                //new AppointHeadOfDepartmentMenuItem(departmentFacade, in),
                 new ExitingMenuItem()
-                //new SaveDepartmentMenuItem(in),
-                //new SaveLectorMenuItem(in),
-                //new AppointHeadOfDepartmentMenuItem(in),
         };
     }
 
@@ -37,18 +38,19 @@ public class Menu implements CommandLineRunner {
 
 
     private int getUserChoice() {
-        OutputMessage.sout(ConsoleColors.YELLOW_BOLD + "Choose Menu item");
+        OutputMessage.soutInline("Choose Menu item ");
         int choice = in.nextInt() - 1;
         in.nextLine();
         return choice;
     }
 
     private void showMenu() {
-        OutputMessage.sout(ConsoleColors.GREEN + "-------------MENU----------------");
+        OutputMessage.sout(ConsoleColors.YELLOW_BOLD + "- - - - - - - - - - - - - - - - - - - - - -\n\n");
+        OutputMessage.sout(ConsoleColors.GREEN + "------------------MENU---------------------");
         for (int i = 0; i < items.length; i++) {
-            OutputMessage.sout(ConsoleColors.GREEN + (i + 1) + ". " + items[i].getName());
+            OutputMessage.sout(ConsoleColors.GREEN + "|\t" + (i + 1) + ".\t" + items[i].getName());
         }
-        OutputMessage.sout(ConsoleColors.GREEN + "---------------------------------");
+        OutputMessage.sout(ConsoleColors.GREEN + "-------------------------------------------\n");
 
     }
 
@@ -75,31 +77,7 @@ public class Menu implements CommandLineRunner {
         }
 
         OutputMessage.showLoggedMessage(ConsoleColors.YELLOW_BOLD + "APPLICATION FINISHED");
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-           /*     } else if (command.contains("add ")) {
-                    String lectorAndDepartment = command.substring("add ".length());
-                    addLectorIntoDepartment(lectorAndDepartment);
-
-                } else if (command.contains("head ")) {
-                    String lectorAndDepartment = command.substring("head ".length());
-                    setHeadOfDepartment(lectorAndDepartment);
-
-                } else if (command.equals("fill")) {
-                    fillDB(in);
-
-              */
-
     }
-
-
-//    private void fillDB(Scanner in) {
-//        OutputMessage.showMessage("   ======   Input string Names For DEPARTMENTS   ======  ");
-//        departmentFacade.fillDbDepartments(in.next().toLowerCase());
-//        OutputMessage.showMessage("   ======   Input string Names For LECTORS   ======   ");
-//        lectorFacade.fillDbLectors(in.next().toLowerCase());
-//    }
 
     @Override
     public void run(String... args) throws Exception {

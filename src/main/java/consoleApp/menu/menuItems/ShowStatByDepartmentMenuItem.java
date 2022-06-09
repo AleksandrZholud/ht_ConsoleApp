@@ -1,8 +1,7 @@
 package consoleApp.menu.menuItems;
 
-import consoleApp.aspects.ConsoleColors;
-import consoleApp.menu.MenuItem;
 import consoleApp.UI.OutputMessage;
+import consoleApp.menu.MenuItem;
 import consoleApp.service.department.DepartmentFacade;
 
 import java.util.Scanner;
@@ -20,7 +19,7 @@ public class ShowStatByDepartmentMenuItem extends MenuItem {
 
     @Override
     public void exec() {
-        OutputMessage.sout(ConsoleColors.YELLOW + "Input department name");
+        OutputMessage.sout("Input department name");
         String departmentName = in.next();
         departmentFacade.showStatistics(departmentName).showMessage();
     }
